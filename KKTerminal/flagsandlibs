@@ -1,10 +1,12 @@
 
 AM_CPPFLAGS =	-I$(top_srcdir) \
 			$(GTK_CFLAGS) \
+			$(VTE_CFLAGS) \
 			-DPREFIX=\""${prefix}\"" \
 			-DDATADIR=\""${pkgdatadir}"\" \
 			-DSYSCONFDIR=\""${sysconfdir}/${PACKAGE}"\" \
 			-DLIBDIR=\""${libdir}/${PACKAGE}"\"
 
-LIBS =	$(GTK_LIBS)
+LIBS =	$(GTK_LIBS) \
+		$(VTE_LIBS)
 
