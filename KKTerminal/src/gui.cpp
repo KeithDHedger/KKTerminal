@@ -139,7 +139,6 @@ extern "C" int addToGui(gpointer data)
 
 int	childPid=-999;
 
-
 void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
 	GString	*pastestr=g_string_new(NULL);
