@@ -21,6 +21,7 @@
 #include <gtk/gtk.h>
 #include <vte/vte.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "config.h"
 #include "globals.h"
@@ -46,96 +47,6 @@ GtkWidget *createNewBox(int orient,bool homog,int spacing)
 
 	return(retwidg);
 }
-
-#if 0
-extern "C" int addToGui(gpointer data)
-{
-	GtkWidget*	menu;
-	plugData*	plugdata=(plugData*)data;
-#ifdef _USEGTK3_
-//#ifdef _VTEVERS291_
-	GdkRGBA		colour;
-//#else
-//	GdkColor	colour;
-//#endif
-#else
-	GdkColor	colour;
-#endif
-	char*		startterm[2]={0,0};
-	char*		filename;
-
-	setTextDomain(true,plugdata);
-	menu=gtk_menu_item_get_submenu((GtkMenuItem*)plugdata->mlist.menuView);
-	hideMenu=gtk_menu_item_new_with_label(gettext("Hide Terminal"));
-	g_signal_connect(G_OBJECT(hideMenu),"activate",G_CALLBACK(toggleTerminal),plugdata);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu),hideMenu);
-	gtk_widget_show_all(plugdata->mlist.menuView);
-
-	terminal=vte_terminal_new();
-	vte_terminal_set_default_colors((VteTerminal*)terminal);
-	vte_terminal_set_scrollback_lines((VteTerminal*)terminal,-1);
-	sinkInt=asprintf(&filename,"%s/terminalpane.rc",plugdata->lPlugFolder);
-	loadVarsFromFile(filename,mydata);
-	debugFree(&filename);
-
-//gdk_rgba_parse
-#ifdef _USEGTK3_
-	gdk_rgba_parse(&colour,(const gchar*)foreColour);
-
-#ifdef _VTEVERS290_
-	vte_terminal_set_color_foreground_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-#else
-	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-#endif
-
-	gdk_rgba_parse(&colour,(const gchar*)backColour);
-#ifdef _VTEVERS290_
-	vte_terminal_set_color_background_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-#else
-	vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-#endif
-
-#else
-	gdk_color_parse((const gchar*)foreColour,&colour);
-	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkColor*)&colour);
-	gdk_color_parse((const gchar*)backColour,&colour);
-	vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkColor*)&colour);
-#endif
-
-	swindow = gtk_scrolled_window_new(NULL, NULL);
-	gtk_container_add(GTK_CONTAINER(swindow),terminal);
-	gtk_box_pack_start((GtkBox*)plugdata->bottomUserBox,swindow,true,true,0);
-	gtk_widget_show_all(plugdata->bottomUserBox);
-
-	g_signal_connect(terminal,"key-press-event",G_CALLBACK(on_key_press),NULL);
-	g_signal_connect(terminal,"button-press-event",G_CALLBACK(doButton),(void*)plugdata);
-	startterm[0]=vte_get_user_shell();
-
-#ifdef _USEGTK3_
-
-#ifdef _VTEVERS290_
-	vte_terminal_fork_command_full((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL);
-#else
-	vte_terminal_spawn_sync((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL,NULL);
-#endif
-
-#else
-	vte_terminal_fork_command_full((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL);
-#endif
-
-	doStartUpCheck(plugdata);
-	showHideTerminal(plugdata,true);
-	if(showing==true)
-		showTop(false);
-	else
-		hideTop(false);
-
-	makeMenu(plugdata);
-	setTextDomain(false,plugdata);
-	return(0);
-}
-
-#endif
 
 int	childPid=-999;
 
@@ -185,8 +96,18 @@ void buildMainGui(void)
 
 	GtkWidget	*terminal=NULL;
 	GtkWidget	*swindow;
+	char		*prefsfile=NULL;
 	char		*startterm[2]={0,0};
 	GtkWidget	*vbox=createNewBox(NEWVBOX,true,true);
+
+	asprintf(&prefsfile,"mkdir -p %s/.KKEdit%s/plugins-gtk",getenv("HOME"),_EXECSUFFIX_);
+	system(prefsfile);
+	freeAndNull(&prefsfile);
+
+	asprintf(&prefsfile,"%s/.KKEdit%s/plugins-gtk/terminalpane.rc",getenv("HOME"),_EXECSUFFIX_);	
+
+	loadVarsFromFile(prefsfile,mydata);
+	freeAndNull(&prefsfile);
 
 	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)mainWindow,800,320);
@@ -207,6 +128,31 @@ void buildMainGui(void)
 	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);
 
 	startterm[0]=vte_get_user_shell();
+
+//gdk_rgba_parse
+#ifdef _USEGTK3_
+	gdk_rgba_parse(&colour,(const gchar*)foreColour);
+
+#ifdef _VTEVERS290_
+	vte_terminal_set_color_foreground_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#else
+	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#endif
+
+	gdk_rgba_parse(&colour,(const gchar*)backColour);
+#ifdef _VTEVERS290_
+	vte_terminal_set_color_background_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#else
+	vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkRGBA*)&colour);
+#endif
+
+#else
+	gdk_color_parse((const gchar*)foreColour,&colour);
+	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkColor*)&colour);
+	gdk_color_parse((const gchar*)backColour,&colour);
+	vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkColor*)&colour);
+#endif
+
 
 #ifdef _USEGTK3_
 

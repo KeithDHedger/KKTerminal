@@ -18,7 +18,86 @@
  * along with KKTerminal.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+#include <string.h>
+#include <stdlib.h>
+
 #include "globals.h"
 
 GtkWidget	*mainWindow;
 GtkWidget	*mainNotebook;
+
+char		*foreColour=strdup("#000000");
+char		*backColour=strdup("#ffffff");
+char		*sinkReturnStr;
+
+args		mydata[]=
+				{
+					{"forecol",TYPESTRING,&foreColour},
+					{"backcol",TYPESTRING,&backColour},
+					{NULL,0,NULL}
+				};
+
+void freeAndNull(char** ptr)
+{
+	if(*ptr!=NULL)
+		free(*ptr);
+
+	*ptr=NULL;
+}
+
+int loadVarsFromFile(char *filepath,args *dataptr)
+{
+	FILE		*fd=NULL;
+	char		buffer[2048];
+	int			cnt;
+	char		*argname=NULL;
+	char		*strarg=NULL;
+	char		*liststr=NULL;
+	int			retval=NOERR;
+
+	fd=fopen(filepath,"r");
+	if(fd!=NULL)
+		{
+			while(feof(fd)==0)
+				{
+					buffer[0]=0;
+					sinkReturnStr=fgets(buffer,2048,fd);
+					sscanf(buffer,"%ms %ms",&argname,&strarg);
+					cnt=0;
+					while(dataptr[cnt].name!=NULL)
+						{
+							if((strarg!=NULL) &&(argname!=NULL) &&(strcmp(argname,dataptr[cnt].name)==0))
+								{
+									switch(dataptr[cnt].type)
+										{
+											case TYPEINT:
+												*(int*)dataptr[cnt].data=atoi(strarg);
+												break;
+											case TYPESTRING:
+												if(*(char**)(dataptr[cnt].data)!=NULL)
+													g_free(*(char**)(dataptr[cnt].data));
+												sscanf(buffer,"%*s %m[^\n]s",(char**)dataptr[cnt].data);
+												break;
+											case TYPEBOOL:
+												*(bool*)dataptr[cnt].data=(bool)atoi(strarg);
+												break;
+											case TYPELIST:
+												sscanf(buffer,"%*s\t%m[^\n]s",&liststr);
+												*(GSList**)dataptr[cnt].data=g_slist_append(*(GSList**)dataptr[cnt].data,liststr);
+												break;
+										}
+								}
+							cnt++;
+						}
+					freeAndNull(&argname);
+					freeAndNull(&strarg);
+				}
+			fclose(fd);
+		}
+	else
+		{
+			retval=NOOPENFILE;
+		}
+
+	return(retval);
+}

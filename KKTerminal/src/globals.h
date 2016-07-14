@@ -25,7 +25,24 @@
 
 #include "globals.h"
 
+struct	args
+{
+	const char		*name;
+	int				type;
+	void			*data;
+};
+
+enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
+enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
+
+extern char*		foreColour;
+extern char*		backColour;
+
+extern args			mydata[]; 
 extern GtkWidget	*mainWindow;
 extern GtkWidget	*mainNotebook;
+
+void freeAndNull(char **ptr);
+int loadVarsFromFile(char *filepath,args *dataptr);
 
 #endif
