@@ -22,11 +22,14 @@
 #include <vte/vte.h>
 #include <string.h>
 #include <stdlib.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "config.h"
 #include "globals.h"
 
 enum {NEWVBOX=0,NEWHBOX};
+unsigned 	labelNum=1;
+GtkWidget	*contextMenu;
 
 GtkWidget *createNewBox(int orient,bool homog,int spacing)
 {
@@ -87,17 +90,152 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 void exitShell(VteTerminal *vteterminal,gpointer pageptr)
 {
 	int			pagenum=-1;
+	GtkWidget	*vbox;
 	pageStruct	*page=(pageStruct*)pageptr;
 
-	pagenum=gtk_notebook_page_num((GtkNotebook*)mainNotebook,page->swindow);
-	gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
-	g_free(page);
+	if(pageptr==NULL)
+		{
+			pagenum=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
+			vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,pagenum);
+			page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
+			g_free(page);
+			gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
+		}
+	else
+		{
+			pagenum=gtk_notebook_page_num((GtkNotebook*)mainNotebook,page->swindow);
+			gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
+			g_free(page);
+		}
 	if(gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)==0)
 		doShutdown(NULL,NULL);
 }
 
+GtkWidget *makeNewTab(char *name,pageStruct *page)
+{
+	char		*labeltext;
+	GtkWidget	*hbox;
+	GtkWidget	*label;
+	
+	GtkWidget	*evbox=gtk_event_box_new();
+	GtkWidget	*close=gtk_image_new_from_icon_name(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
+	GtkWidget	*button=gtk_button_new();
+
+	hbox=createNewBox(NEWHBOX,false,0);
+	asprintf(&labeltext,"Shell %i",labelNum++);
+	label=gtk_label_new(labeltext);
+	g_free(labeltext);
+
+	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
+	gtk_box_pack_start(GTK_BOX(hbox),label,false,false,0);
+
+	gtk_button_set_focus_on_click(GTK_BUTTON(button),FALSE);
+	gtk_container_add(GTK_CONTAINER(button),close);
+
+	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
+	gtk_container_add(GTK_CONTAINER(evbox),hbox);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(exitShell),(void*)page);
+	//g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
+
+	//page->tabName=label;
+	//page->pageID=pageID++;
+	//page->tabButton=button;
+//TODO//
+//#ifdef _USEGTK3_
+//	applyCSS(button,tabBoxProvider);
+//	gtk_style_context_reset_widgets(gdk_screen_get_default());
+//#else
+//	GtkRcStyle	*style=gtk_rc_style_new();
+//	style->xthickness=style->ythickness=tabsSize;
+//	gtk_widget_modify_style(button,style);
+//	g_object_unref(G_OBJECT(style));
+//#endif
+	gtk_widget_show_all(evbox);
+	return(evbox);
+}
+
+gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page)
+{
+	int button, event_time;
+
+	gtk_widget_set_can_focus(page->terminal,true);
+	gtk_widget_grab_focus(page->terminal);
+
+///* Ignore double-clicks and triple-clicks */
+  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    {
+		gtk_widget_show_all(contextMenu);
+		if (event)
+			{
+				button=event->button;
+				event_time=event->time;
+			}
+		else
+			{
+				button=0;
+				event_time=gtk_get_current_event_time();
+				}
+
+		gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,button,event_time);
+	}
+	return(false);
+}
+
+void copyFromTerm(GtkWidget* widget,pageStruct *page)
+{
+	vte_terminal_copy_clipboard((VteTerminal*)page->terminal);
+}
+
+void pasteToTerm(GtkWidget* widget,pageStruct *page)
+{
+	vte_terminal_paste_clipboard((VteTerminal*)page->terminal);
+}
+
+void selectAllInTerm(GtkWidget* widget,pageStruct *page)
+{
+	vte_terminal_select_all((VteTerminal*)page->terminal);
+}
+
+
+void makeMenu(pageStruct *page)
+{
+	GtkWidget *popmenuitem;
+
+	contextMenu=gtk_menu_new ();
+
+	popmenuitem=gtk_menu_item_new_with_label("Copy");
+	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(copyFromTerm),page);
+	gtk_menu_shell_append(GTK_MENU_SHELL(contextMenu),popmenuitem);
+
+	popmenuitem=gtk_menu_item_new_with_label("Paste");
+	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(pasteToTerm),page);
+	gtk_menu_shell_append(GTK_MENU_SHELL(contextMenu),popmenuitem);
+
+	popmenuitem=gtk_menu_item_new_with_label("Select All");
+	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(selectAllInTerm),page);
+	gtk_menu_shell_append(GTK_MENU_SHELL(contextMenu),popmenuitem);
+}
+
+gboolean on_key_press(GtkWidget *terminal,GdkEventKey *event)
+{
+	if (event->state == (GDK_CONTROL_MASK | GDK_SHIFT_MASK))
+		{
+			switch (event->keyval)
+				{
+				case GDK_C:
+					vte_terminal_copy_clipboard(VTE_TERMINAL(terminal));
+					return true;
+				case GDK_V:
+					vte_terminal_paste_clipboard(VTE_TERMINAL(terminal));
+					return true;
+				}
+		}
+	return false;
+}
+
 void addPage(void)
 {
+	GtkWidget	*label;
 #ifdef _USEGTK3_
 	GdkRGBA		colour;
 #else
@@ -117,7 +255,9 @@ void addPage(void)
 	gtk_scrolled_window_set_policy((GtkScrolledWindow*)page->swindow,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
 	gtk_container_add(GTK_CONTAINER(page->swindow),page->terminal);
 
-	gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->swindow,NULL);
+	page->tabVbox=createNewBox(NEWVBOX,true,4);
+	label=makeNewTab(NULL,page);
+	gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->swindow,label);
 	gtk_notebook_set_tab_reorderable((GtkNotebook*)mainNotebook,page->swindow,true);
 
 	startterm[0]=vte_get_user_shell();
@@ -147,7 +287,7 @@ void addPage(void)
 #ifdef _VTEVERS290_
 	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
 #else
-	vte_terminal_spawn_sync((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->childPid,NULL,NULL);
+	vte_terminal_spawn_sync((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL,NULL);
 #endif
 #else
 	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
@@ -159,6 +299,14 @@ void addPage(void)
 	gtk_drag_dest_add_text_targets(page->terminal);
 	g_signal_connect(G_OBJECT(page->terminal),"drag_data_received",G_CALLBACK(dropUri),NULL);
 	g_signal_connect(G_OBJECT(page->terminal),"child-exited",G_CALLBACK(exitShell),(void*)page);
+
+//context
+	g_signal_connect(page->terminal,"button-press-event",G_CALLBACK(doButton),page);
+	g_signal_connect(page->terminal,"key-press-event",G_CALLBACK(on_key_press),NULL);
+	makeMenu(page);
+	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)page);
+
+	gtk_widget_show_all(mainWindow);
 }
 
 void buildMainGui(void)
@@ -171,8 +319,11 @@ void buildMainGui(void)
 
 	GtkWidget	*terminal=NULL;
 	GtkWidget	*swindow;
+	GtkWidget	*menu;
+	GtkWidget	*menuitem;
+
 	char		*startterm[2]={0,0};
-	GtkWidget	*vbox=createNewBox(NEWVBOX,true,true);
+	GtkWidget	*vbox=createNewBox(NEWVBOX,false,0);
 
 	asprintf(&prefsFile,"mkdir -p %s/.KKEdit%s/plugins-gtk",getenv("HOME"),_EXECSUFFIX_);
 	system(prefsFile);
@@ -186,13 +337,35 @@ void buildMainGui(void)
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);
 
 	gtk_notebook_set_show_tabs((GtkNotebook*)mainNotebook,true);
-	gtk_container_add((GtkContainer*)vbox,mainNotebook);
-	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);
-	
-	addPage();
-	addPage();
-	addPage();
 
+//menus
+	menuBar=gtk_menu_bar_new();
+//file menu
+	fileMenu=gtk_menu_item_new_with_label("_File");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)fileMenu,true);
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
+//new
+	menuitem=gtk_menu_item_new_with_mnemonic("_New Shell");
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(addPage),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//close
+	menuitem=gtk_menu_item_new_with_mnemonic("_Close Tab");
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(exitShell),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//quit
+	menuitem=gtk_menu_item_new_with_mnemonic("_Quit");
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+//addmenubar
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMenu);
+	gtk_box_pack_start((GtkBox*)vbox,menuBar,false,false,0);
+	gtk_box_pack_start((GtkBox*)vbox,mainNotebook,true,true,0);
+
+	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);
+
+	addPage();
 	gtk_widget_show_all(mainWindow);
 }
 

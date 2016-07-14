@@ -1,7 +1,14 @@
-0.0.1
+0.0.2
+Added keyboard cut/paste.
+Added context menu.
+Added menubar.
+Added close button to tab label.
+Made tabs reorderable
 App quits on final shell exiting.
 Page removed when shell exits.
 Added prefs file ( shared with kkedit terminal plugin prefs ).
 Added basic d'n'd for text and files.
-Basic teminal working.
+
+0.0.1
+Basic terminal working.
 Project start.

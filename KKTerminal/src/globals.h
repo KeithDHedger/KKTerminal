@@ -23,7 +23,13 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-#include "globals.h"
+//#include "globals.h"
+
+#ifdef _USEGTK3_
+#define GTK_STOCK_CLOSE "window-close"
+#define GDK_C GDK_KEY_C
+#define GDK_V GDK_KEY_V
+#endif
 
 struct	args
 {
@@ -37,6 +43,7 @@ struct	pageStruct
 	GtkWidget		*terminal;
 	GtkWidget		*swindow;
 	int				pid;
+	GtkWidget		*tabVbox;
 };
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
@@ -49,6 +56,9 @@ extern char			*prefsFile;
 
 extern GtkWidget	*mainWindow;
 extern GtkWidget	*mainNotebook;
+extern GtkWidget	*menuBar;
+//file menu
+extern GtkWidget	*fileMenu;
 
 void doShutdown(GtkWidget* widget,gpointer data);
 void freeAndNull(char **ptr);

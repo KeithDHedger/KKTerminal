@@ -25,6 +25,9 @@
 
 GtkWidget	*mainWindow;
 GtkWidget	*mainNotebook;
+GtkWidget	*menuBar;
+//file menu
+GtkWidget	*fileMenu;
 
 char		*foreColour=strdup("#000000");
 char		*backColour=strdup("#ffffff");
