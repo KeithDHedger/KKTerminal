@@ -337,7 +337,7 @@ void buildMainGui(void)
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);
 
 	gtk_notebook_set_show_tabs((GtkNotebook*)mainNotebook,true);
-	g_object_set_data(G_OBJECT(mainNotebook),"homogeneous",(gpointer)true);
+	g_object_set_data(G_OBJECT(mainNotebook),"tab-expand",(gpointer)true);
 
 //menus
 	menuBar=gtk_menu_bar_new();
