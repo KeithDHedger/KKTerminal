@@ -48,8 +48,6 @@ GtkWidget *createNewBox(int orient,bool homog,int spacing)
 	return(retwidg);
 }
 
-int	childPid=-999;
-
 void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
 {
 	GString	*pastestr=g_string_new(NULL);
@@ -86,6 +84,79 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 	gtk_drag_finish(context,true,false,time);		
 }
 
+void exitShell(VteTerminal *vteterminal,gpointer pageptr)
+{
+	int			pagenum=-1;
+	pageStruct	*page=(pageStruct*)pageptr;
+
+	pagenum=gtk_notebook_page_num((GtkNotebook*)mainNotebook,page->swindow);
+	gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
+	printf("close this tab %i\n",pagenum);
+}
+
+void addPage(void)
+{
+#ifdef _USEGTK3_
+	GdkRGBA		colour;
+#else
+	GdkColor	colour;
+#endif
+
+	char		*startterm[2]={0,0};
+
+	loadVarsFromFile(prefsFile,mydata);
+
+	pageStruct	*page=(pageStruct*)malloc(sizeof(pageStruct));
+	page->terminal=vte_terminal_new();
+	vte_terminal_set_default_colors((VteTerminal*)page->terminal);
+	vte_terminal_set_scrollback_lines((VteTerminal*)page->terminal,-1);
+
+	page->swindow=gtk_scrolled_window_new(NULL,NULL);
+	gtk_scrolled_window_set_policy((GtkScrolledWindow*)page->swindow,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+	gtk_container_add(GTK_CONTAINER(page->swindow),page->terminal);
+
+	gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->swindow,NULL);
+	startterm[0]=vte_get_user_shell();
+
+//gdk_rgba_parse
+#ifdef _USEGTK3_
+	gdk_rgba_parse(&colour,(const gchar*)foreColour);
+#ifdef _VTEVERS290_
+	vte_terminal_set_color_foreground_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&colour);
+#else
+	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkRGBA*)&colour);
+#endif
+	gdk_rgba_parse(&colour,(const gchar*)backColour);
+#ifdef _VTEVERS290_
+	vte_terminal_set_color_background_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&colour);
+#else
+	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkRGBA*)&colour);
+#endif
+#else
+	gdk_color_parse((const gchar*)foreColour,&colour);
+	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkColor*)&colour);
+	gdk_color_parse((const gchar*)backColour,&colour);
+	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkColor*)&colour);
+#endif
+
+#ifdef _USEGTK3_
+#ifdef _VTEVERS290_
+	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
+#else
+	vte_terminal_spawn_sync((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->childPid,NULL,NULL);
+#endif
+#else
+	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
+#endif
+
+//dnd
+	gtk_drag_dest_set(page->terminal,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
+	gtk_drag_dest_add_uri_targets(page->terminal);
+	gtk_drag_dest_add_text_targets(page->terminal);
+	g_signal_connect(G_OBJECT(page->terminal),"drag_data_received",G_CALLBACK(dropUri),NULL);
+	g_signal_connect(G_OBJECT(page->terminal),"child-exited",G_CALLBACK(exitShell),(void*)page);
+}
+
 void buildMainGui(void)
 {
 #ifdef _USEGTK3_
@@ -96,18 +167,14 @@ void buildMainGui(void)
 
 	GtkWidget	*terminal=NULL;
 	GtkWidget	*swindow;
-	char		*prefsfile=NULL;
 	char		*startterm[2]={0,0};
 	GtkWidget	*vbox=createNewBox(NEWVBOX,true,true);
 
-	asprintf(&prefsfile,"mkdir -p %s/.KKEdit%s/plugins-gtk",getenv("HOME"),_EXECSUFFIX_);
-	system(prefsfile);
-	freeAndNull(&prefsfile);
+	asprintf(&prefsFile,"mkdir -p %s/.KKEdit%s/plugins-gtk",getenv("HOME"),_EXECSUFFIX_);
+	system(prefsFile);
+	freeAndNull(&prefsFile);
 
-	asprintf(&prefsfile,"%s/.KKEdit%s/plugins-gtk/terminalpane.rc",getenv("HOME"),_EXECSUFFIX_);	
-
-	loadVarsFromFile(prefsfile,mydata);
-	freeAndNull(&prefsfile);
+	asprintf(&prefsFile,"%s/.KKEdit%s/plugins-gtk/terminalpane.rc",getenv("HOME"),_EXECSUFFIX_);	
 
 	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)mainWindow,800,320);
@@ -115,62 +182,11 @@ void buildMainGui(void)
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);
 	gtk_notebook_set_show_tabs((GtkNotebook*)mainNotebook,true);
 	gtk_container_add((GtkContainer*)vbox,mainNotebook);
-
-	terminal=vte_terminal_new();
-	vte_terminal_set_default_colors((VteTerminal*)terminal);
-	vte_terminal_set_scrollback_lines((VteTerminal*)terminal,-1);
-
-	swindow=gtk_scrolled_window_new(NULL,NULL);
-	gtk_scrolled_window_set_policy((GtkScrolledWindow*)swindow,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
-	gtk_container_add(GTK_CONTAINER(swindow),terminal);
-
-	gtk_notebook_append_page((GtkNotebook*)mainNotebook,swindow,NULL);
 	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);
-
-	startterm[0]=vte_get_user_shell();
-
-//gdk_rgba_parse
-#ifdef _USEGTK3_
-	gdk_rgba_parse(&colour,(const gchar*)foreColour);
-
-#ifdef _VTEVERS290_
-	vte_terminal_set_color_foreground_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-#else
-	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-#endif
-
-	gdk_rgba_parse(&colour,(const gchar*)backColour);
-#ifdef _VTEVERS290_
-	vte_terminal_set_color_background_rgba((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-#else
-	vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkRGBA*)&colour);
-#endif
-
-#else
-	gdk_color_parse((const gchar*)foreColour,&colour);
-	vte_terminal_set_color_foreground((VteTerminal*)terminal,(const GdkColor*)&colour);
-	gdk_color_parse((const gchar*)backColour,&colour);
-	vte_terminal_set_color_background((VteTerminal*)terminal,(const GdkColor*)&colour);
-#endif
-
-
-#ifdef _USEGTK3_
-
-#ifdef _VTEVERS290_
-	vte_terminal_fork_command_full((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL);
-#else
-	vte_terminal_spawn_sync((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL,NULL);
-#endif
-
-#else
-	vte_terminal_fork_command_full((VteTerminal *)terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&childPid,NULL);
-#endif
-
-//dnd
-	gtk_drag_dest_set(terminal,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
-	gtk_drag_dest_add_uri_targets(terminal);
-	gtk_drag_dest_add_text_targets(terminal);
-	g_signal_connect(G_OBJECT(terminal),"drag_data_received",G_CALLBACK(dropUri),NULL);
+	
+	addPage();
+	addPage();
+	addPage();
 
 	gtk_widget_show_all(mainWindow);
 }

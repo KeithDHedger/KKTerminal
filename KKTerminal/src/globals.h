@@ -32,13 +32,21 @@ struct	args
 	void			*data;
 };
 
+struct	pageStruct
+{
+	GtkWidget	*terminal;
+	GtkWidget	*swindow;
+	int			pid;
+};
+
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
 enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
 
 extern char*		foreColour;
 extern char*		backColour;
-
 extern args			mydata[]; 
+extern char			*prefsFile;
+
 extern GtkWidget	*mainWindow;
 extern GtkWidget	*mainNotebook;
 

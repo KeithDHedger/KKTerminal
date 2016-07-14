@@ -1,4 +1,5 @@
 0.0.1
+Page removed when shell exits.
 Added prefs file ( shared with kkedit terminal plugin prefs ).
 Added basic d'n'd for text and files.
 Basic teminal working.

@@ -29,6 +29,7 @@ GtkWidget	*mainNotebook;
 char		*foreColour=strdup("#000000");
 char		*backColour=strdup("#ffffff");
 char		*sinkReturnStr;
+char		*prefsFile=NULL;
 
 args		mydata[]=
 				{
