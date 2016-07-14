@@ -91,7 +91,9 @@ void exitShell(VteTerminal *vteterminal,gpointer pageptr)
 
 	pagenum=gtk_notebook_page_num((GtkNotebook*)mainNotebook,page->swindow);
 	gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
-	printf("close this tab %i\n",pagenum);
+	g_free(page);
+	if(gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)==0)
+		doShutdown(NULL,NULL);
 }
 
 void addPage(void)
@@ -116,6 +118,8 @@ void addPage(void)
 	gtk_container_add(GTK_CONTAINER(page->swindow),page->terminal);
 
 	gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->swindow,NULL);
+	gtk_notebook_set_tab_reorderable((GtkNotebook*)mainNotebook,page->swindow,true);
+
 	startterm[0]=vte_get_user_shell();
 
 //gdk_rgba_parse
@@ -180,6 +184,7 @@ void buildMainGui(void)
 	gtk_window_set_default_size((GtkWindow*)mainWindow,800,320);
 	mainNotebook=gtk_notebook_new();
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);
+
 	gtk_notebook_set_show_tabs((GtkNotebook*)mainNotebook,true);
 	gtk_container_add((GtkContainer*)vbox,mainNotebook);
 	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);

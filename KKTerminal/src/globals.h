@@ -34,9 +34,9 @@ struct	args
 
 struct	pageStruct
 {
-	GtkWidget	*terminal;
-	GtkWidget	*swindow;
-	int			pid;
+	GtkWidget		*terminal;
+	GtkWidget		*swindow;
+	int				pid;
 };
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
@@ -50,6 +50,7 @@ extern char			*prefsFile;
 extern GtkWidget	*mainWindow;
 extern GtkWidget	*mainNotebook;
 
+void doShutdown(GtkWidget* widget,gpointer data);
 void freeAndNull(char **ptr);
 int loadVarsFromFile(char *filepath,args *dataptr);
 

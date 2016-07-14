@@ -46,6 +46,12 @@ void freeAndNull(char** ptr)
 	*ptr=NULL;
 }
 
+void doShutdown(GtkWidget* widget,gpointer data)
+{
+	gtk_main_quit();
+}
+
+
 int loadVarsFromFile(char *filepath,args *dataptr)
 {
 	FILE		*fd=NULL;
