@@ -9,7 +9,8 @@
 #include <string.h>
 #include <sys/stat.h>
 
-GtkWidget *window = NULL;
+#include "globals.h"
+#include "gui.h"
 
 void shutdown(GtkWidget* widget,gpointer data)
 {
@@ -19,8 +20,9 @@ void shutdown(GtkWidget* widget,gpointer data)
 int main(int argc,char **argv)
 {
 	gtk_init(&argc,&argv);
-	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	g_signal_connect(G_OBJECT(window),"delete-event",G_CALLBACK(shutdown),NULL);
-	gtk_widget_show_all(window);
+
+	buildMainGui();
+	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(shutdown),NULL);
+	gtk_widget_show_all(mainWindow);
 	gtk_main();
 }
