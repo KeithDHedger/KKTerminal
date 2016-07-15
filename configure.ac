@@ -22,14 +22,14 @@ AC_ARG_ENABLE(gtk3,
 AC_MSG_RESULT($enable_gtk3)
 if test "$enable_gtk3" = "yes"; then
 	AC_DEFINE([_USEGTK3_], [], [Use GTK3])
-	AC_DEFINE([_EXECSUFFIX_], ["-3"], [Use GTK3])
+#	AC_DEFINE([_EXECSUFFIX_], ["-3"], [Use GTK3])
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
-	program_transform_name='s,\(^[[kK]].*t.*\),\1-3,'
-	GTK3SUFFIX=-3
+#	program_transform_name='s,\(^[[kK]].*t.*\),\1-3,'
+#	GTK3SUFFIX=-3
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	AC_DEFINE([_EXECSUFFIX_], [""], [Use GTK3])
-	GTK3SUFFIX=
+#	GTK3SUFFIX=
 fi
 
 PKG_CHECK_MODULES(GTK,$GTK_MODULES)

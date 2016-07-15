@@ -4379,18 +4379,16 @@ if test "$enable_gtk3" = "yes"; then
 
 $as_echo "#define _USEGTK3_ /**/" >>confdefs.h
 
-
-$as_echo "#define _EXECSUFFIX_ \"-3\"" >>confdefs.h
-
+#	AC_DEFINE([_EXECSUFFIX_], ["-3"], [Use GTK3])
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
-	program_transform_name='s,\(^[kK].*t.*\),\1-3,'
-	GTK3SUFFIX=-3
+#	program_transform_name='s,\(^[[kK]].*t.*\),\1-3,'
+#	GTK3SUFFIX=-3
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 
 $as_echo "#define _EXECSUFFIX_ \"\"" >>confdefs.h
 
-	GTK3SUFFIX=
+#	GTK3SUFFIX=
 fi
 
 

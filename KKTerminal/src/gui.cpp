@@ -198,6 +198,7 @@ void addPage(void)
 	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)page);
 
 	gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-expand",true,NULL);
+
 	gtk_widget_show_all(mainWindow);
 }
 
@@ -217,11 +218,11 @@ void buildMainGui(void)
 	char		*startterm[2]={0,0};
 	GtkWidget	*vbox=createNewBox(NEWVBOX,false,0);
 
-	asprintf(&prefsFile,"mkdir -p %s/.KKTerminal%s",getenv("HOME"),_EXECSUFFIX_);
+	asprintf(&prefsFile,"mkdir -p %s/.KKTerminal",getenv("HOME"));
 	system(prefsFile);
 	freeAndNull(&prefsFile);
 
-	asprintf(&prefsFile,"%s/.KKTerminal%s/kkterminal.rc",getenv("HOME"),_EXECSUFFIX_);	
+	asprintf(&prefsFile,"%s/.KKTerminal/kkterminal.rc",getenv("HOME"));	
 
 	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)mainWindow,800,320);
