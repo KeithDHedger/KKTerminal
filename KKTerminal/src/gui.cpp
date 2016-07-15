@@ -111,23 +111,38 @@ void exitShell(VteTerminal *vteterminal,gpointer pageptr)
 		doShutdown(NULL,NULL);
 }
 
+#ifdef _USEGTK3_
+void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider)
+{
+	gtk_style_context_add_provider(gtk_widget_get_style_context (widget),widgprovider,GTK_STYLE_PROVIDER_PRIORITY_USER);
+	if (GTK_IS_CONTAINER (widget))
+		gtk_container_forall (GTK_CONTAINER(widget),(GtkCallback)applyCSS,widgprovider);
+}
+#endif
+
 GtkWidget *makeNewTab(char *name,pageStruct *page)
 {
 	char		*labeltext;
 	GtkWidget	*hbox;
+	GtkWidget	*pad;
 	GtkWidget	*label;
+	GtkWidget	*evbox=NULL;
 	
-	GtkWidget	*evbox=gtk_event_box_new();
+	evbox=gtk_event_box_new();
 	GtkWidget	*close=gtk_image_new_from_icon_name(GTK_STOCK_CLOSE,GTK_ICON_SIZE_MENU);
 	GtkWidget	*button=gtk_button_new();
 
 	hbox=createNewBox(NEWHBOX,false,0);
+	pad=createNewBox(NEWHBOX,false,0);
 	asprintf(&labeltext,"Shell %i",labelNum++);
 	label=gtk_label_new(labeltext);
 	g_free(labeltext);
 
 	gtk_button_set_relief((GtkButton*)button,GTK_RELIEF_NONE);
 	gtk_box_pack_start(GTK_BOX(hbox),label,false,false,0);
+
+	gtk_box_pack_start(GTK_BOX(hbox),pad,true,true,0);
+
 
 	gtk_button_set_focus_on_click(GTK_BUTTON(button),FALSE);
 	gtk_container_add(GTK_CONTAINER(button),close);
@@ -137,19 +152,30 @@ GtkWidget *makeNewTab(char *name,pageStruct *page)
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(exitShell),(void*)page);
 	//g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
-	//page->tabName=label;
-	//page->pageID=pageID++;
-	//page->tabButton=button;
 //TODO//
-//#ifdef _USEGTK3_
-//	applyCSS(button,tabBoxProvider);
-//	gtk_style_context_reset_widgets(gdk_screen_get_default());
-//#else
-//	GtkRcStyle	*style=gtk_rc_style_new();
-//	style->xthickness=style->ythickness=tabsSize;
-//	gtk_widget_modify_style(button,style);
-//	g_object_unref(G_OBJECT(style));
-//#endif
+#ifdef _USEGTK3_
+#ifdef _USEGTK3_
+	char	*tabcss=NULL;
+	GtkStyleProvider	*provider;
+	GtkStyleProvider	*tabBoxProvider;
+
+	provider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	asprintf(&tabcss,"* {\n \
+  padding: %ipx; \n \
+}\n",0);
+
+	tabBoxProvider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
+	g_free(tabcss);
+#endif
+	applyCSS(evbox,tabBoxProvider);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+#else
+	GtkRcStyle	*style=gtk_rc_style_new();
+	style->xthickness=style->ythickness=0;
+	gtk_widget_modify_style(button,style);
+	g_object_unref(G_OBJECT(style));
+#endif
 	gtk_widget_show_all(evbox);
 	return(evbox);
 }
@@ -257,6 +283,14 @@ void addPage(void)
 
 	page->tabVbox=createNewBox(NEWVBOX,true,4);
 	label=makeNewTab(NULL,page);
+
+//	g_object_set_data(G_OBJECT(page->swindow),"tab-expand",(gpointer)0);
+//	g_object_set_data(G_OBJECT(page->tabVbox),"tab-expand",(gpointer)0);
+//	g_object_set_data(G_OBJECT(page->swindow),"tab-fill",(gpointer)0);
+//	g_object_set_data(G_OBJECT(page->tabVbox),"tab-fill",(gpointer)0);
+//	g_object_set_data(G_OBJECT(mainNotebook),"homogeneous",(gpointer)0);
+
+
 	gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->swindow,label);
 	gtk_notebook_set_tab_reorderable((GtkNotebook*)mainNotebook,page->swindow,true);
 
@@ -304,9 +338,54 @@ void addPage(void)
 	g_signal_connect(page->terminal,"button-press-event",G_CALLBACK(doButton),page);
 	g_signal_connect(page->terminal,"key-press-event",G_CALLBACK(on_key_press),NULL);
 	makeMenu(page);
+	gtk_widget_show_all(mainWindow);
 	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)page);
 
-	gtk_widget_show_all(mainWindow);
+//gtk_notebook_set_tab_label_packing ((GtkNotebook*)mainNotebook,page->swindow, TRUE, TRUE, GTK_PACK_START);
+//
+//
+//	gtk_widget_show_all(mainWindow);
+//
+//GtkWidget *child=gtk_notebook_get_nth_page ((GtkNotebook*)mainNotebook,0);
+////printf(">>>>%i<<<<\n",g_object_get_data(G_OBJECT(page->swindow),"tab-expand"));
+////printf(">>>>%i<<<<\n",g_object_get_data(G_OBJECT(page->swindow),"tab-fill"));
+////printf(">>>>%i<<<<\n",g_object_get_data(G_OBJECT(page->tabVbox),"tab-expand"));
+////printf(">>>>%i<<<<\n",g_object_get_data(G_OBJECT(page->tabVbox),"tab-fill"));
+////printf(">>>>%i<<<<\n",g_object_get_data(G_OBJECT(label),"tab-expand"));
+////printf(">>>>%i<<<<\n",g_object_get_data(G_OBJECT(label),"tab-fill"));
+//printf(">>>>%i<<<<\n",g_object_get_data(G_OBJECT(child),"tab-expand"));
+//printf(">>>>%i<<<<\n",g_object_get_data(G_OBJECT(child),"tab-fill"));
+//
+//gboolean ex;
+//gboolean fil;
+//GtkPackType pack;
+//gboolean *ptr;
+//
+//gpointer p1=NULL,p2=NULL,p3=NULL;
+//
+//gtk_notebook_query_tab_label_packing ((GtkNotebook*)mainNotebook,child,&ex,&fil,&pack);
+//printf(">>%i %i\n",ex,fil);
+//
+//GtkWidget *cc=NULL;
+//cc=gtk_notebook_get_tab_label ((GtkNotebook*)mainNotebook,page->swindow);
+//
+//p1=g_object_get_data(G_OBJECT(child),"tab-expand");
+//p2=g_object_get_data(G_OBJECT(child),"tab-fill");
+//printf("--%p %p\n",p1,p2);
+//
+//p1=g_object_get_data(G_OBJECT(page->swindow),"tab-expand");
+//p2=g_object_get_data(G_OBJECT(page->swindow),"tab-fill");
+//p3=g_object_get_data(G_OBJECT(page->swindow),"reorderable");
+//printf("--%p %p %p %p\n",p1,p2,p3,cc);
+//
+//p1=g_object_get_data((GObject*)evbox,"tab-expand");
+//p2=g_object_get_data((GObject*)evbox,"tab-fill");
+//p3=g_object_get_data((GObject*)cc,"reorderable");
+//printf("--%p %p %p %p\n",p1,p2,p3,cc);
+
+	gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-expand",true,NULL);
+//gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-fill",true,NULL);
+gtk_widget_show_all(mainWindow);
 }
 
 void buildMainGui(void)
@@ -338,6 +417,7 @@ void buildMainGui(void)
 
 	gtk_notebook_set_show_tabs((GtkNotebook*)mainNotebook,true);
 	g_object_set_data(G_OBJECT(mainNotebook),"tab-expand",(gpointer)true);
+	g_object_set_data(G_OBJECT(mainNotebook),"tab-fill",(gpointer)true);
 
 //menus
 	menuBar=gtk_menu_bar_new();
