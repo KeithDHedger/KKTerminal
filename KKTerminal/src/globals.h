@@ -20,10 +20,10 @@
 
 #include <gtk/gtk.h>
 
+#include "config.h"
+
 #ifndef _GLOBALS_
 #define _GLOBALS_
-
-//#include "globals.h"
 
 #ifdef _USEGTK3_
 #define GTK_STOCK_CLOSE "window-close"
@@ -57,6 +57,12 @@ extern char			*prefsFile;
 extern GtkWidget	*mainWindow;
 extern GtkWidget	*mainNotebook;
 extern GtkWidget	*menuBar;
+extern GtkWidget	*contextMenu;
+
+#ifdef _USEGTK3_
+extern GtkStyleProvider	*tabBoxProvider;
+#endif
+
 //file menu
 extern GtkWidget	*fileMenu;
 

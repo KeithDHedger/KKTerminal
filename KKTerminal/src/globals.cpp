@@ -26,6 +26,12 @@
 GtkWidget	*mainWindow;
 GtkWidget	*mainNotebook;
 GtkWidget	*menuBar;
+GtkWidget	*contextMenu;
+
+#ifdef _USEGTK3_
+GtkStyleProvider	*tabBoxProvider;
+#endif
+
 //file menu
 GtkWidget	*fileMenu;
 

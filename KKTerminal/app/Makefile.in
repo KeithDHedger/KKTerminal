@@ -103,7 +103,8 @@ am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(scriptfilesdir)" \
 	"$(DESTDIR)$(man1dir)" "$(DESTDIR)$(pixfilesdir)"
 PROGRAMS = $(bin_PROGRAMS)
 am__dirstamp = $(am__leading_dot)dirstamp
-am__objects_1 = ../src/kkterminal-globals.$(OBJEXT) \
+am__objects_1 = ../src/kkterminal-callbacks.$(OBJEXT) \
+	../src/kkterminal-globals.$(OBJEXT) \
 	../src/kkterminal-gui.$(OBJEXT) \
 	../src/kkterminal-main.$(OBJEXT)
 am_kkterminal_OBJECTS = $(am__objects_1)
@@ -311,13 +312,14 @@ AM_CPPFLAGS = -I$(top_srcdir) \
 			$(VTE_CFLAGS) \
 			-DGTK_DISABLE_SINGLE_INCLUDES \
 			-DGDK_DISABLE_DEPRECATED \
+			-DGTK_DISABLE_DEPRECATED \
 			-DGSEAL_ENABLE \
 			-DPREFIX=\""${prefix}\"" \
 			-DDATADIR=\""${pkgdatadir}"\" \
 			-DSYSCONFDIR=\""${sysconfdir}/${PACKAGE}"\" \
 			-DLIBDIR=\""${libdir}/${PACKAGE}"\"
 
-COMMONSRC = ../src/globals.cpp ../src/gui.cpp ../src/main.cpp
+COMMONSRC = ../src/callbacks.cpp ../src/globals.cpp ../src/gui.cpp ../src/main.cpp
 kkterminal_SOURCES = $(COMMONSRC)
 kkterminal_CXXFLAGS = -O2 -g
 pixfilesdir = $(pkgdatadir)/pixmaps
@@ -407,6 +409,8 @@ clean-binPROGRAMS:
 ../src/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../src/$(DEPDIR)
 	@: > ../src/$(DEPDIR)/$(am__dirstamp)
+../src/kkterminal-callbacks.$(OBJEXT): ../src/$(am__dirstamp) \
+	../src/$(DEPDIR)/$(am__dirstamp)
 ../src/kkterminal-globals.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
 ../src/kkterminal-gui.$(OBJEXT): ../src/$(am__dirstamp) \
@@ -460,6 +464,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkterminal-callbacks.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkterminal-globals.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkterminal-gui.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkterminal-main.Po@am__quote@
@@ -479,6 +484,20 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXXCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+../src/kkterminal-callbacks.o: ../src/callbacks.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkterminal-callbacks.o -MD -MP -MF ../src/$(DEPDIR)/kkterminal-callbacks.Tpo -c -o ../src/kkterminal-callbacks.o `test -f '../src/callbacks.cpp' || echo '$(srcdir)/'`../src/callbacks.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkterminal-callbacks.Tpo ../src/$(DEPDIR)/kkterminal-callbacks.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/callbacks.cpp' object='../src/kkterminal-callbacks.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkterminal-callbacks.o `test -f '../src/callbacks.cpp' || echo '$(srcdir)/'`../src/callbacks.cpp
+
+../src/kkterminal-callbacks.obj: ../src/callbacks.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkterminal-callbacks.obj -MD -MP -MF ../src/$(DEPDIR)/kkterminal-callbacks.Tpo -c -o ../src/kkterminal-callbacks.obj `if test -f '../src/callbacks.cpp'; then $(CYGPATH_W) '../src/callbacks.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/callbacks.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkterminal-callbacks.Tpo ../src/$(DEPDIR)/kkterminal-callbacks.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/callbacks.cpp' object='../src/kkterminal-callbacks.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkterminal-callbacks.obj `if test -f '../src/callbacks.cpp'; then $(CYGPATH_W) '../src/callbacks.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/callbacks.cpp'; fi`
 
 ../src/kkterminal-globals.o: ../src/globals.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkterminal-globals.o -MD -MP -MF ../src/$(DEPDIR)/kkterminal-globals.Tpo -c -o ../src/kkterminal-globals.o `test -f '../src/globals.cpp' || echo '$(srcdir)/'`../src/globals.cpp

@@ -30,6 +30,15 @@ int main(int argc,char **argv)
 {
 	gtk_init(&argc,&argv);
 
+#ifdef _USEGTK3_
+	char	*tabcss=NULL;
+
+	asprintf(&tabcss,"* {\n padding: %ipx;\n}\n",0);
+	tabBoxProvider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
+	gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
+	g_free(tabcss);
+#endif
+
 	buildMainGui();
 	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
 	gtk_widget_show_all(mainWindow);

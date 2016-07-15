@@ -1,1 +1,1 @@
-COMMONSRC = ../src/globals.cpp ../src/gui.cpp ../src/main.cpp
+COMMONSRC = ../src/callbacks.cpp ../src/globals.cpp ../src/gui.cpp ../src/main.cpp
