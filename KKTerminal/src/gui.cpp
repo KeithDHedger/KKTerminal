@@ -217,11 +217,11 @@ void buildMainGui(void)
 	char		*startterm[2]={0,0};
 	GtkWidget	*vbox=createNewBox(NEWVBOX,false,0);
 
-	asprintf(&prefsFile,"mkdir -p %s/.KKEdit%s/plugins-gtk",getenv("HOME"),_EXECSUFFIX_);
+	asprintf(&prefsFile,"mkdir -p %s/.KKTerminal%s",getenv("HOME"),_EXECSUFFIX_);
 	system(prefsFile);
 	freeAndNull(&prefsFile);
 
-	asprintf(&prefsFile,"%s/.KKEdit%s/plugins-gtk/terminalpane.rc",getenv("HOME"),_EXECSUFFIX_);	
+	asprintf(&prefsFile,"%s/.KKTerminal%s/kkterminal.rc",getenv("HOME"),_EXECSUFFIX_);	
 
 	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size((GtkWindow*)mainWindow,800,320);

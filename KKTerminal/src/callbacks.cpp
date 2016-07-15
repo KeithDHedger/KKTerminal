@@ -21,6 +21,7 @@
 #include <gtk/gtk.h>
 #include <vte/vte.h>
 #include <string.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "globals.h"
 #include "config.h"

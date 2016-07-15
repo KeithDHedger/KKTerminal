@@ -1,4 +1,6 @@
 0.0.2
+Prefs file now unique.
+Set tabs width to fill window.
 Set tabs size smaller.
 Done close tab from menu.
 Added keyboard cut/paste.
