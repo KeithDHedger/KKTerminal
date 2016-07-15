@@ -21,6 +21,7 @@
 #include <gtk/gtk.h>
 
 #include "config.h"
+#include "internet.h"
 
 #ifndef _GLOBALS_
 #define _GLOBALS_
@@ -65,6 +66,8 @@ extern GtkStyleProvider	*tabBoxProvider;
 
 //file menu
 extern GtkWidget	*fileMenu;
+//help
+extern GtkWidget	*helpMenu;
 
 void doShutdown(GtkWidget* widget,gpointer data);
 void freeAndNull(char **ptr);

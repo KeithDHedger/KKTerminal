@@ -35,6 +35,9 @@ GtkStyleProvider	*tabBoxProvider;
 //file menu
 GtkWidget	*fileMenu;
 
+//help
+GtkWidget	*helpMenu;
+
 char		*foreColour=strdup("#000000");
 char		*backColour=strdup("#ffffff");
 char		*sinkReturnStr;

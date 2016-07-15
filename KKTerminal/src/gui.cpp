@@ -252,8 +252,19 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
+//help
+	helpMenu=gtk_menu_item_new_with_label("_Help");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)helpMenu,true);
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
+//about
+	menuitem=gtk_menu_item_new_with_mnemonic("_About");
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
 //addmenubar
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),helpMenu);
 	gtk_box_pack_start((GtkBox*)vbox,menuBar,false,false,0);
 	gtk_box_pack_start((GtkBox*)vbox,mainNotebook,true,true,0);
 

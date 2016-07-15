@@ -106,6 +106,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 am__objects_1 = ../src/kkterminal-callbacks.$(OBJEXT) \
 	../src/kkterminal-globals.$(OBJEXT) \
 	../src/kkterminal-gui.$(OBJEXT) \
+	../src/kkterminal-internet.$(OBJEXT) \
 	../src/kkterminal-main.$(OBJEXT)
 am_kkterminal_OBJECTS = $(am__objects_1)
 kkterminal_OBJECTS = $(am_kkterminal_OBJECTS)
@@ -319,7 +320,7 @@ AM_CPPFLAGS = -I$(top_srcdir) \
 			-DSYSCONFDIR=\""${sysconfdir}/${PACKAGE}"\" \
 			-DLIBDIR=\""${libdir}/${PACKAGE}"\"
 
-COMMONSRC = ../src/callbacks.cpp ../src/globals.cpp ../src/gui.cpp ../src/main.cpp
+COMMONSRC = ../src/callbacks.cpp ../src/globals.cpp ../src/gui.cpp ../src/internet.cpp ../src/main.cpp
 kkterminal_SOURCES = $(COMMONSRC)
 kkterminal_CXXFLAGS = -O2 -g
 pixfilesdir = $(pkgdatadir)/pixmaps
@@ -415,6 +416,8 @@ clean-binPROGRAMS:
 	../src/$(DEPDIR)/$(am__dirstamp)
 ../src/kkterminal-gui.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
+../src/kkterminal-internet.$(OBJEXT): ../src/$(am__dirstamp) \
+	../src/$(DEPDIR)/$(am__dirstamp)
 ../src/kkterminal-main.$(OBJEXT): ../src/$(am__dirstamp) \
 	../src/$(DEPDIR)/$(am__dirstamp)
 
@@ -467,6 +470,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkterminal-callbacks.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkterminal-globals.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkterminal-gui.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkterminal-internet.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@../src/$(DEPDIR)/kkterminal-main.Po@am__quote@
 
 .cpp.o:
@@ -526,6 +530,20 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/gui.cpp' object='../src/kkterminal-gui.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkterminal-gui.obj `if test -f '../src/gui.cpp'; then $(CYGPATH_W) '../src/gui.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/gui.cpp'; fi`
+
+../src/kkterminal-internet.o: ../src/internet.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkterminal-internet.o -MD -MP -MF ../src/$(DEPDIR)/kkterminal-internet.Tpo -c -o ../src/kkterminal-internet.o `test -f '../src/internet.cpp' || echo '$(srcdir)/'`../src/internet.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkterminal-internet.Tpo ../src/$(DEPDIR)/kkterminal-internet.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/internet.cpp' object='../src/kkterminal-internet.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkterminal-internet.o `test -f '../src/internet.cpp' || echo '$(srcdir)/'`../src/internet.cpp
+
+../src/kkterminal-internet.obj: ../src/internet.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkterminal-internet.obj -MD -MP -MF ../src/$(DEPDIR)/kkterminal-internet.Tpo -c -o ../src/kkterminal-internet.obj `if test -f '../src/internet.cpp'; then $(CYGPATH_W) '../src/internet.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/internet.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) ../src/$(DEPDIR)/kkterminal-internet.Tpo ../src/$(DEPDIR)/kkterminal-internet.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='../src/internet.cpp' object='../src/kkterminal-internet.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -c -o ../src/kkterminal-internet.obj `if test -f '../src/internet.cpp'; then $(CYGPATH_W) '../src/internet.cpp'; else $(CYGPATH_W) '$(srcdir)/../src/internet.cpp'; fi`
 
 ../src/kkterminal-main.o: ../src/main.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(kkterminal_CXXFLAGS) $(CXXFLAGS) -MT ../src/kkterminal-main.o -MD -MP -MF ../src/$(DEPDIR)/kkterminal-main.Tpo -c -o ../src/kkterminal-main.o `test -f '../src/main.cpp' || echo '$(srcdir)/'`../src/main.cpp

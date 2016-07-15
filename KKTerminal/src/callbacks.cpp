@@ -145,3 +145,15 @@ gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page)
 	return(false);
 }
 
+void doAbout(GtkWidget* widget,gpointer data)
+{
+	const char	copyright[]=COPYRITE " \n" MYEMAIL;
+	const char*	aboutboxstring="KKTerminal - Simple small terminal for gtk2/3";
+	char*		licence;
+
+	g_file_get_contents(DATADIR"/docs/gpl-3.0.txt",&licence,NULL,NULL);
+
+	gtk_show_about_dialog(NULL,"authors",authors,"comments",aboutboxstring,"copyright",copyright,"version",VERSION,"website",MANPAGEPAGE,"program-name","ManPage Editor","website-label","Manpage Editor Page","logo-icon-name","ManPageEditor","license",licence,NULL);
+
+	g_free(licence);
+}

@@ -32,5 +32,6 @@ void pasteToTerm(GtkWidget* widget,pageStruct *page);
 void selectAllInTerm(GtkWidget* widget,pageStruct *page);
 gboolean on_key_press(GtkWidget *terminal,GdkEventKey *event);
 gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page);
+void doAbout(GtkWidget* widget,gpointer data);
 
 #endif
