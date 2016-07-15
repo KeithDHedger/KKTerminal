@@ -23,5 +23,6 @@
 #define _GUI_
 
 void buildMainGui(void);
+void addPage(const char *dir);
 
 #endif

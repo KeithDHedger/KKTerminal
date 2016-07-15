@@ -34,40 +34,45 @@
 
 struct	args
 {
-	const char		*name;
-	int				type;
-	void			*data;
+	const char			*name;
+	int					type;
+	void				*data;
 };
 
 struct	pageStruct
 {
-	GtkWidget		*terminal;
-	GtkWidget		*swindow;
-	int				pid;
-	GtkWidget		*tabVbox;
+	GtkWidget			*terminal;
+	GtkWidget			*swindow;
+	int					pid;
+	GtkWidget			*tabVbox;
 };
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
 enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
 
-extern char*		foreColour;
-extern char*		backColour;
-extern args			mydata[]; 
-extern char			*prefsFile;
+//aplication
+extern char				*foreColour;
+extern char				*backColour;
+extern args				mydata[]; 
+extern char				*prefsFile;
+extern int				sinkReturn;
+extern char				*sinkReturnStr;
+extern bool				singleUse;
+extern GApplication		*mainApp;
 
-extern GtkWidget	*mainWindow;
-extern GtkWidget	*mainNotebook;
-extern GtkWidget	*menuBar;
-extern GtkWidget	*contextMenu;
+extern GtkWidget		*mainWindow;
+extern GtkWidget		*mainNotebook;
+extern GtkWidget		*menuBar;
+extern GtkWidget		*contextMenu;
 
 #ifdef _USEGTK3_
 extern GtkStyleProvider	*tabBoxProvider;
 #endif
 
 //file menu
-extern GtkWidget	*fileMenu;
+extern GtkWidget		*fileMenu;
 //help
-extern GtkWidget	*helpMenu;
+extern GtkWidget		*helpMenu;
 
 void doShutdown(GtkWidget* widget,gpointer data);
 void freeAndNull(char **ptr);

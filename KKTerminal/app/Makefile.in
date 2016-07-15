@@ -239,6 +239,7 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LDFLAGS = @LDFLAGS@
 LIBOBJS = @LIBOBJS@
 LIBS = $(GTK_LIBS) \
+		$(X11_LIBS) \
 		$(VTE_LIBS)
 
 LTLIBOBJS = @LTLIBOBJS@
@@ -262,6 +263,8 @@ STRIP = @STRIP@
 VERSION = @VERSION@
 VTE_CFLAGS = @VTE_CFLAGS@
 VTE_LIBS = @VTE_LIBS@
+X11_CFLAGS = @X11_CFLAGS@
+X11_LIBS = @X11_LIBS@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -309,6 +312,7 @@ AUTOMAKE_OPTIONS = subdir-objects
 AM_CPPFLAGS = -I$(top_srcdir) \
 			$(GTK_CFLAGS) \
 			$(VTE_CFLAGS) \
+			$(X11_CFLAGS) \
 			-DGTK_DISABLE_SINGLE_INCLUDES \
 			-DGDK_DISABLE_DEPRECATED \
 			-DGTK_DISABLE_DEPRECATED \
@@ -826,7 +830,6 @@ install-data-hook:
 	mkdir -p $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps $(DESTDIR)${prefix}/share/applications $(DESTDIR)${prefix}/share/pixmaps||true
 	ln -sf $(pkgdatadir)/pixmaps/KKTerminal.png $(DESTDIR)${prefix}/share/icons/hicolor/128x128/apps/KKTerminal.png
 	ln -sf $(pkgdatadir)/pixmaps/KKTerminal.png $(DESTDIR)${prefix}/share/pixmaps/KKTerminal.png
-
 	cp ../resources/pixmaps/KKTerminal.desktop $(DESTDIR)${prefix}/share/applications/KKTerminal.desktop
 
 uninstall-hook:

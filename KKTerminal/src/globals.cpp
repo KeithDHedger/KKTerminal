@@ -23,25 +23,29 @@
 
 #include "globals.h"
 
-GtkWidget	*mainWindow;
-GtkWidget	*mainNotebook;
-GtkWidget	*menuBar;
-GtkWidget	*contextMenu;
+GtkWidget			*mainWindow;
+GtkWidget			*mainNotebook;
+GtkWidget			*menuBar;
+GtkWidget			*contextMenu;
 
 #ifdef _USEGTK3_
 GtkStyleProvider	*tabBoxProvider;
 #endif
 
 //file menu
-GtkWidget	*fileMenu;
+GtkWidget			*fileMenu;
 
 //help
-GtkWidget	*helpMenu;
+GtkWidget			*helpMenu;
 
-char		*foreColour=strdup("#000000");
-char		*backColour=strdup("#ffffff");
-char		*sinkReturnStr;
-char		*prefsFile=NULL;
+//aplication
+char				*foreColour=strdup("#000000");
+char				*backColour=strdup("#ffffff");
+char				*sinkReturnStr;
+char				*prefsFile=NULL;
+int					sinkReturn;
+bool				singleUse=true;
+GApplication		*mainApp;
 
 args		mydata[]=
 				{
@@ -60,9 +64,9 @@ void freeAndNull(char** ptr)
 
 void doShutdown(GtkWidget* widget,gpointer data)
 {
-	gtk_main_quit();
+	g_free(prefsFile);
+	g_application_quit (mainApp);
 }
-
 
 int loadVarsFromFile(char *filepath,args *dataptr)
 {

@@ -14,6 +14,11 @@ AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 AC_SUBST(CXXFLAGS)
 
+X11_MODULES="x11 >= 1.0.0"
+PKG_CHECK_MODULES(X11, $X11_MODULES)
+AC_SUBST(X11_LIBS)
+AC_SUBST(X11_CFLAGS)
+
 AC_MSG_CHECKING(whether to use gtk3)
 AC_ARG_ENABLE(gtk3,
     [  --enable-gtk3           Use GTK3.],
@@ -22,14 +27,10 @@ AC_ARG_ENABLE(gtk3,
 AC_MSG_RESULT($enable_gtk3)
 if test "$enable_gtk3" = "yes"; then
 	AC_DEFINE([_USEGTK3_], [], [Use GTK3])
-#	AC_DEFINE([_EXECSUFFIX_], ["-3"], [Use GTK3])
 	GTK_MODULES="gtk+-3.0 >= 3.10.0"
-#	program_transform_name='s,\(^[[kK]].*t.*\),\1-3,'
-#	GTK3SUFFIX=-3
 else
 	GTK_MODULES="gtk+-2.0 >= 2.24.0"
 	AC_DEFINE([_EXECSUFFIX_], [""], [Use GTK3])
-#	GTK3SUFFIX=
 fi
 
 PKG_CHECK_MODULES(GTK,$GTK_MODULES)

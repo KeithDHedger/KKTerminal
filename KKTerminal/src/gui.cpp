@@ -122,9 +122,10 @@ void makeMenu(pageStruct *page)
 	gtk_menu_shell_append(GTK_MENU_SHELL(contextMenu),popmenuitem);
 }
 
-void addPage(void)
+void addPage(const char *dir)
 {
 	GtkWidget	*label;
+	int			newpagenum;
 #ifdef _USEGTK3_
 	GdkRGBA		colour;
 #else
@@ -147,7 +148,7 @@ void addPage(void)
 	page->tabVbox=createNewBox(NEWVBOX,true,4);
 	label=makeNewTab(NULL,page);
 
-	gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->swindow,label);
+	newpagenum=gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->swindow,label);
 	gtk_notebook_set_tab_reorderable((GtkNotebook*)mainNotebook,page->swindow,true);
 
 	startterm[0]=vte_get_user_shell();
@@ -175,12 +176,12 @@ void addPage(void)
 
 #ifdef _USEGTK3_
 #ifdef _VTEVERS290_
-	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
+	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
 #else
-	vte_terminal_spawn_sync((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL,NULL);
+	vte_terminal_spawn_sync((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL,NULL);
 #endif
 #else
-	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,NULL,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
+	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
 #endif
 
 //dnd
@@ -199,6 +200,7 @@ void addPage(void)
 
 	gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-expand",true,NULL);
 
+	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,newpagenum);
 	gtk_widget_show_all(mainWindow);
 }
 
@@ -271,7 +273,7 @@ void buildMainGui(void)
 
 	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);
 
-	addPage();
+//	addPage(getenv("HOME"));
 	gtk_widget_show_all(mainWindow);
 }
 

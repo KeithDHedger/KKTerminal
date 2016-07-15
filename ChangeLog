@@ -1,4 +1,7 @@
 0.0.3
+CD's to folder given on command line.
+Uses single instance.
+Started single instance code.
 Tweaked install locations.
 
 0.0.2
