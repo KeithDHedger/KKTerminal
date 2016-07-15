@@ -11,8 +11,8 @@ kkterminal_CXXFLAGS = -O2 -g
 pixfilesdir = $(pkgdatadir)/pixmaps
 pixfiles_DATA = ../resources/pixmaps/*
 
-scriptfilesdir = $(pkgdatadir)/scripts
-scriptfiles_SCRIPTS = ../resources/scripts/README
+docfilesdir = $(pkgdatadir)/docs
+docfiles_DATA = ../resources/docs/*
 
 bin_PROGRAMS = kkterminal
 
