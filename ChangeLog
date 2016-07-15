@@ -1,4 +1,5 @@
 0.0.3
+New shell now switches to new tab.
 CD's to folder given on command line.
 Uses single instance.
 Started single instance code.

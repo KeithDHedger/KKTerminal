@@ -200,8 +200,13 @@ void addPage(const char *dir)
 
 	gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-expand",true,NULL);
 
-	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,newpagenum);
 	gtk_widget_show_all(mainWindow);
+	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,newpagenum);
+}
+
+void newPage(GtkWidget *widget,gpointer data)
+{
+	addPage(getenv("HOME"));
 }
 
 void buildMainGui(void)
@@ -244,7 +249,7 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 //new
 	menuitem=gtk_menu_item_new_with_mnemonic("_New Shell");
-	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(addPage),NULL);
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(newPage),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //close
 	menuitem=gtk_menu_item_new_with_mnemonic("_Close Tab");
@@ -273,7 +278,6 @@ void buildMainGui(void)
 
 	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);
 
-//	addPage(getenv("HOME"));
 	gtk_widget_show_all(mainWindow);
 }
 
