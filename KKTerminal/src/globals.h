@@ -63,7 +63,6 @@ extern GApplication		*mainApp;
 extern GtkWidget		*mainWindow;
 extern GtkWidget		*mainNotebook;
 extern GtkWidget		*menuBar;
-//extern GtkWidget		*contextMenu;
 
 #ifdef _USEGTK3_
 extern GtkStyleProvider	*tabBoxProvider;

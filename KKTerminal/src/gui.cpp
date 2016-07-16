@@ -201,7 +201,6 @@ void addPage(const char *dir)
 //context
 	g_signal_connect(page->terminal,"button-press-event",G_CALLBACK(doButton),page);
 	g_signal_connect(page->terminal,"key-press-event",G_CALLBACK(on_key_press),NULL);
-//	makeMenu(page);
 	gtk_widget_show_all(mainWindow);
 	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)page);
 
@@ -284,7 +283,6 @@ void buildMainGui(void)
 	gtk_box_pack_start((GtkBox*)vbox,mainNotebook,true,true,0);
 
 	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);
-//	makeMenu(page);
 
 	gtk_widget_show_all(mainWindow);
 }
