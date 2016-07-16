@@ -1,0 +1,22 @@
+KKTerminal
+
+KKTerminal is a simple small terminal emulator for gtk2/3.
+
+Features:
+Single instance app, but can be launced in a new instance by using the '-m' switch.
+Open multiple tabs at once just give path to directorys on command line, eg:
+kkterminal / ~ /usr/share
+
+Open a new tab in current window:
+kkterminal ~/Desktop
+
+Supports drag'n'drop of files onto tab to paste single quoted filepath.
+supports drag'n'drop of text into window ( no quoting ).
+
+The idea of this is to have a small USABLE terminal emulator without all the bloat of other emulators, suggestions, bug reports etc welecome, send to:
+keithhedger@keithhedger.darktech.org
+
+I have only just started this project so look for lots more to come.
+
+Why KKTerminal?, just 'cos it matches my editor KKEdit here:
+http://kkedit.darktech.org
