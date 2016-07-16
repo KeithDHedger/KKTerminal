@@ -207,6 +207,12 @@ void addPage(const char *dir)
 	gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-expand",true,NULL);
 	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,newpagenum);
 	gtk_widget_show_all(mainWindow);
+
+	if(termCommand!=NULL)
+		{
+			vte_terminal_feed_child((VteTerminal*)page->terminal,termCommand,-1);
+			vte_terminal_feed_child((VteTerminal*)page->terminal,"\n",-1);
+		}
 }
 
 void newPage(GtkWidget *widget,gpointer data)

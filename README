@@ -10,6 +10,9 @@ kkterminal / ~ /usr/share
 Open a new tab in current window:
 kkterminal ~/Desktop
 
+Execute command in all shells given on command line:
+kkterminal -e ls /usr ~ /media
+
 Supports drag'n'drop of files onto tab to paste single quoted filepath.
 supports drag'n'drop of text into window ( no quoting ).
 

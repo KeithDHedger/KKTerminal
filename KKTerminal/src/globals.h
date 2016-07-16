@@ -59,6 +59,7 @@ extern int				sinkReturn;
 extern char				*sinkReturnStr;
 extern bool				singleUse;
 extern GApplication		*mainApp;
+extern const char		*termCommand;
 
 extern GtkWidget		*mainWindow;
 extern GtkWidget		*mainNotebook;

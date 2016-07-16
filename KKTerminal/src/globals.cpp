@@ -45,6 +45,7 @@ char				*prefsFile=NULL;
 int					sinkReturn;
 bool				singleUse=true;
 GApplication		*mainApp;
+const char			*termCommand=NULL;
 
 args		mydata[]=
 				{

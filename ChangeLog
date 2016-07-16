@@ -1,4 +1,5 @@
 0.0.4
+Added '--command,-e' option to inject command into shell ( injected into all shell if multiple folders given on command line ). 
 Fixed pop menu in terminal not copying/pasting from/to correct window.
 
 0.0.3
