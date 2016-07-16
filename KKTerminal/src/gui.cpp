@@ -45,7 +45,6 @@ GtkWidget *createNewBox(int orient,bool homog,int spacing)
 	else
 		retwidg=gtk_hbox_new(homog,spacing);
 #endif
-
 	return(retwidg);
 }
 
@@ -71,7 +70,10 @@ GtkWidget *makeNewTab(char *name,pageStruct *page)
 	GtkWidget	*button=gtk_button_new();
 
 	hbox=createNewBox(NEWHBOX,false,0);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox),0);
+
 	pad=createNewBox(NEWHBOX,false,0);
+	gtk_container_set_border_width (GTK_CONTAINER (pad),0);
 	asprintf(&labeltext,"Shell %i",labelNum++);
 	label=gtk_label_new(labeltext);
 	g_free(labeltext);
@@ -83,9 +85,11 @@ GtkWidget *makeNewTab(char *name,pageStruct *page)
 
 	gtk_button_set_focus_on_click(GTK_BUTTON(button),FALSE);
 	gtk_container_add(GTK_CONTAINER(button),close);
+	gtk_container_set_border_width (GTK_CONTAINER (button),0);
 
 	gtk_box_pack_start(GTK_BOX(hbox),button,false,false,0);
 	gtk_container_add(GTK_CONTAINER(evbox),hbox);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox),0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(exitShell),(void*)page);
 	//g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
@@ -199,9 +203,8 @@ void addPage(const char *dir)
 	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)page);
 
 	gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-expand",true,NULL);
-
-	gtk_widget_show_all(mainWindow);
 	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,newpagenum);
+	gtk_widget_show_all(mainWindow);
 }
 
 void newPage(GtkWidget *widget,gpointer data)
@@ -237,8 +240,9 @@ void buildMainGui(void)
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);
 
 	gtk_notebook_set_show_tabs((GtkNotebook*)mainNotebook,true);
-	g_object_set_data(G_OBJECT(mainNotebook),"tab-expand",(gpointer)true);
-	g_object_set_data(G_OBJECT(mainNotebook),"tab-fill",(gpointer)true);
+#ifndef _USEGTK3_
+	g_object_set((GObject*)mainNotebook,"tab-vborder",0,NULL);
+#endif
 
 //menus
 	menuBar=gtk_menu_bar_new();
@@ -277,6 +281,7 @@ void buildMainGui(void)
 	gtk_box_pack_start((GtkBox*)vbox,mainNotebook,true,true,0);
 
 	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);
+//	makeMenu(page);
 
 	gtk_widget_show_all(mainWindow);
 }
