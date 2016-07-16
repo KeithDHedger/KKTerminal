@@ -24,6 +24,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "globals.h"
+#include "gui.h"
 #include "config.h"
 
 void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
@@ -120,7 +121,8 @@ gboolean on_key_press(GtkWidget *terminal,GdkEventKey *event)
 
 gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page)
 {
-	int button, event_time;
+	int			button,event_time;
+	GtkWidget	*menu=NULL;
 
 	gtk_widget_set_can_focus(page->terminal,true);
 	gtk_widget_grab_focus(page->terminal);
@@ -128,7 +130,8 @@ gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page)
 ///* Ignore double-clicks and triple-clicks */
   if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
     {
-		gtk_widget_show_all(contextMenu);
+    	menu=makeMenu(page);
+		gtk_widget_show_all(menu);
 		if (event)
 			{
 				button=event->button;
@@ -140,7 +143,7 @@ gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page)
 				event_time=gtk_get_current_event_time();
 				}
 
-		gtk_menu_popup(GTK_MENU(contextMenu),NULL,NULL,NULL,NULL,button,event_time);
+		gtk_menu_popup(GTK_MENU(menu),NULL,NULL,NULL,NULL,button,event_time);
 	}
 	return(false);
 }

@@ -1,3 +1,6 @@
+0.0.4
+Fixed pop menu in terminal not copying/pasting from/to correct window.
+
 0.0.3
 Made tabs smaller ( gtk2 only ).
 New shell now switches to new tab.

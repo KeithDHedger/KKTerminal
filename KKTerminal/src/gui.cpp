@@ -107,23 +107,26 @@ GtkWidget *makeNewTab(char *name,pageStruct *page)
 	return(evbox);
 }
 
-void makeMenu(pageStruct *page)
+GtkWidget *makeMenu(pageStruct *page)
 {
-	GtkWidget *popmenuitem;
+	GtkWidget	*popmenuitem;
+	GtkWidget	*retwidg=NULL;
 
-	contextMenu=gtk_menu_new ();
+	retwidg=gtk_menu_new ();
 
 	popmenuitem=gtk_menu_item_new_with_label("Copy");
 	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(copyFromTerm),page);
-	gtk_menu_shell_append(GTK_MENU_SHELL(contextMenu),popmenuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(retwidg),popmenuitem);
 
 	popmenuitem=gtk_menu_item_new_with_label("Paste");
 	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(pasteToTerm),page);
-	gtk_menu_shell_append(GTK_MENU_SHELL(contextMenu),popmenuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(retwidg),popmenuitem);
 
 	popmenuitem=gtk_menu_item_new_with_label("Select All");
 	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(selectAllInTerm),page);
-	gtk_menu_shell_append(GTK_MENU_SHELL(contextMenu),popmenuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(retwidg),popmenuitem);
+
+	return(retwidg);
 }
 
 void addPage(const char *dir)
@@ -198,7 +201,7 @@ void addPage(const char *dir)
 //context
 	g_signal_connect(page->terminal,"button-press-event",G_CALLBACK(doButton),page);
 	g_signal_connect(page->terminal,"key-press-event",G_CALLBACK(on_key_press),NULL);
-	makeMenu(page);
+//	makeMenu(page);
 	gtk_widget_show_all(mainWindow);
 	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)page);
 
