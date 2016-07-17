@@ -47,6 +47,7 @@ bool				singleUse=true;
 GApplication		*mainApp;
 const char			*termCommand=NULL;
 char				*windowAllocData=NULL;
+GtkAccelGroup		*accGroup=NULL;
 
 //main mainWindow
 int					windowWidth=800;

@@ -69,6 +69,7 @@ extern bool				singleUse;
 extern GApplication		*mainApp;
 extern const char		*termCommand;
 extern char				*windowAllocData;
+extern GtkAccelGroup	*accGroup;
 
 //main mainWindow
 extern int				windowWidth;

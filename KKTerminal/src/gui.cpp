@@ -282,7 +282,7 @@ void newPage(GtkWidget *widget,gpointer data)
 	g_free(wd);
 }
 
-GtkWidget* newMenuItem(const char* menuname,const char* stockid)
+GtkWidget* newMenuItem(const char* menuname,const char* stockid,char hotkey)
 {
 	GtkWidget	*menu;
 #ifdef _USEGTK3_
@@ -290,6 +290,9 @@ GtkWidget* newMenuItem(const char* menuname,const char* stockid)
 #else
 	menu=gtk_image_menu_item_new_from_stock(stockid,NULL);
 #endif
+	if(hotkey>0)
+//		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,hotkey,(GdkModifierType)(GDK_CONTROL_MASK|GDK_SHIFT_MASK),GTK_ACCEL_VISIBLE);
+		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,hotkey,(GdkModifierType)(GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
 
 	return(menu);
 }
@@ -319,6 +322,9 @@ void buildMainGui(void)
 	gtk_window_set_default_icon_name(PACKAGE);
 	gtk_window_set_icon_name((GtkWindow*)mainWindow,PACKAGE);
 
+	accGroup=gtk_accel_group_new();
+	gtk_window_add_accel_group((GtkWindow*)mainWindow,accGroup);
+
 	mainNotebook=gtk_notebook_new();
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);
 
@@ -335,18 +341,15 @@ void buildMainGui(void)
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 //new
-	//menuitem=gtk_menu_item_new_with_mnemonic("_New Shell");
-	menuitem=newMenuItem("_New Shell",GTK_STOCK_NEW);
+	menuitem=newMenuItem("_New Shell",GTK_STOCK_NEW,'N');
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(newPage),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //close
-//	menuitem=gtk_menu_item_new_with_mnemonic("_Close Tab");
-	menuitem=newMenuItem("_Close Tab",GTK_STOCK_CLOSE);
+	menuitem=newMenuItem("_Close Tab",GTK_STOCK_CLOSE,'W');
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(exitShell),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //quit
-	//menuitem=gtk_menu_item_new_with_mnemonic("_Quit");
-	menuitem=newMenuItem("_Quit",GTK_STOCK_QUIT);
+	menuitem=newMenuItem("_Quit",GTK_STOCK_QUIT,'Q');
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
@@ -356,8 +359,7 @@ void buildMainGui(void)
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
 //about
-	//menuitem=gtk_menu_item_new_with_mnemonic("_About");
-	menuitem=newMenuItem("_About",GTK_STOCK_ABOUT);
+	menuitem=newMenuItem("_About",GTK_STOCK_ABOUT,0);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
