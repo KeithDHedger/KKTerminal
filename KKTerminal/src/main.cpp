@@ -75,6 +75,14 @@ void appStart(GApplication  *application,gpointer data)
 	g_free(tabcss);
 #endif
 
+	asprintf(&prefsFile,"mkdir -p %s/.KKTerminal ||true",getenv("HOME"));
+	system(prefsFile);
+	freeAndNull(&prefsFile);
+	asprintf(&prefsFile,"%s/.KKTerminal/kkterminal.rc",getenv("HOME"));	
+	loadVarsFromFile(prefsFile,mydata);
+	if(windowAllocData!=NULL)
+		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
+
 	buildMainGui();
 	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
 	if(openHome==true)
@@ -121,7 +129,7 @@ int main(int argc,char **argv)
 
 	gtk_init(&argc,&argv);
 
-	sinkReturn=asprintf(&dbusname,"org.keithhedger%i." PACKAGE,getWorkspaceNumber());
+	sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,getWorkspaceNumber());
 	if((singleOverRide==true) ||(singleUse==false))
 		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_OPEN));
 	else

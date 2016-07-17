@@ -141,7 +141,7 @@ void addPage(const char *dir)
 
 	char		*startterm[2]={0,0};
 
-	loadVarsFromFile(prefsFile,mydata);
+//	loadVarsFromFile(prefsFile,mydata);
 
 	pageStruct	*page=(pageStruct*)malloc(sizeof(pageStruct));
 	page->terminal=vte_terminal_new();
@@ -237,14 +237,12 @@ void buildMainGui(void)
 	char		*startterm[2]={0,0};
 	GtkWidget	*vbox=createNewBox(NEWVBOX,false,0);
 
-	asprintf(&prefsFile,"mkdir -p %s/.KKTerminal",getenv("HOME"));
-	system(prefsFile);
-	freeAndNull(&prefsFile);
-
-	asprintf(&prefsFile,"%s/.KKTerminal/kkterminal.rc",getenv("HOME"));	
-
 	mainWindow=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size((GtkWindow*)mainWindow,800,320);
+
+	gtk_window_set_default_size((GtkWindow*)mainWindow,windowWidth,windowHeight);
+	if(windowX!=-1 && windowY!=-1)
+		gtk_window_move((GtkWindow *)mainWindow,windowX,windowY);
+
 	mainNotebook=gtk_notebook_new();
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);
 

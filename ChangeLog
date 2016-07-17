@@ -1,4 +1,6 @@
 0.0.4
+Window size/position now saved on exit.
+Set window size added to prefs ( eg  windowsize 1000 400 200 100 ).
 Added '--command,-e' option to inject command into shell ( injected into all shell if multiple folders given on command line ). 
 Fixed pop menu in terminal not copying/pasting from/to correct window.
 

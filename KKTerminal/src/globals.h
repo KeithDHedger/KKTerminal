@@ -32,6 +32,8 @@
 #define GDK_V GDK_KEY_V
 #endif
 
+#define	APPEXECNAME "kkterminal"
+
 struct	args
 {
 	const char			*name;
@@ -61,6 +63,13 @@ extern char				*sinkReturnStr;
 extern bool				singleUse;
 extern GApplication		*mainApp;
 extern const char		*termCommand;
+extern char				*windowAllocData;
+
+//main mainWindow
+extern int				windowWidth;
+extern int				windowHeight;
+extern int				windowX;
+extern int				windowY;
 
 extern GtkWidget		*mainWindow;
 extern GtkWidget		*mainNotebook;

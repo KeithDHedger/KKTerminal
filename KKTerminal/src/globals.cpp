@@ -46,11 +46,19 @@ int					sinkReturn;
 bool				singleUse=true;
 GApplication		*mainApp;
 const char			*termCommand=NULL;
+char				*windowAllocData=NULL;
+
+//main mainWindow
+int					windowWidth=800;
+int					windowHeight=400;
+int					windowX=-1;
+int					windowY=-1;
 
 args		mydata[]=
 				{
 					{"forecol",TYPESTRING,&foreColour},
 					{"backcol",TYPESTRING,&backColour},
+					{"windowsize",TYPESTRING,&windowAllocData},
 					{NULL,0,NULL}
 				};
 
@@ -62,10 +70,46 @@ void freeAndNull(char** ptr)
 	*ptr=NULL;
 }
 
-void doShutdown(GtkWidget* widget,gpointer data)
+void saveVarsToFile(char *filepath,args *dataptr)
 {
-	g_free(prefsFile);
-	g_application_quit (mainApp);
+	FILE	*fd=NULL;
+	int		cnt=0;
+	GSList	*list=NULL;
+
+	fd=fopen(filepath,"w");
+	if(fd!=NULL)
+		{
+			while(dataptr[cnt].name!=NULL)
+				{
+					switch(dataptr[cnt].type)
+						{
+							case TYPEINT:
+								fprintf(fd,"%s	%i\n",dataptr[cnt].name,*(int*)dataptr[cnt].data);
+								break;
+							case TYPESTRING:
+								fprintf(fd,"%s	%s\n",dataptr[cnt].name,*(char**)(dataptr[cnt].data));
+								break;
+							case TYPEBOOL:
+								fprintf(fd,"%s	%i\n",dataptr[cnt].name,(int)*(bool*)dataptr[cnt].data);
+								break;
+//							case TYPELIST:
+//								list=*(GSList**)((dataptr[cnt].data));
+//								if(g_slist_length(list)>maxFRHistory)
+//									list=g_slist_nth(list,g_slist_length(list)-maxFRHistory);
+//								while(list!=NULL)
+//									{
+//										if(strlen((char*)list->data)>0)
+//											{
+//												fprintf(fd,"%s\t%s\n",dataptr[cnt].name,(char*)list->data);
+//											}
+//										list=list->next;
+//									}
+//								break;
+						}
+					cnt++;
+				}
+			fclose(fd);
+		}
 }
 
 int loadVarsFromFile(char *filepath,args *dataptr)
@@ -124,3 +168,26 @@ int loadVarsFromFile(char *filepath,args *dataptr)
 
 	return(retval);
 }
+
+void writeExitData(void)
+{
+	GtkAllocation	alloc;
+	int				winx;
+	int				winy;
+
+	gtk_widget_get_allocation(mainWindow,&alloc);
+	gtk_window_get_position((GtkWindow*)mainWindow,&winx,&winy);
+	if( (alloc.width>10) && (alloc.height>10) )
+		sinkReturn=asprintf(&windowAllocData,"%i %i %i %i",alloc.width,alloc.height,winx,winy);
+
+	saveVarsToFile(prefsFile,mydata);
+}
+
+void doShutdown(GtkWidget* widget,gpointer data)
+{
+	writeExitData();
+	g_free(prefsFile);
+	g_free(windowAllocData);
+	g_application_quit(mainApp);
+}
+
