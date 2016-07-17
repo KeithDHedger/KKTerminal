@@ -202,7 +202,8 @@ void addPage(const char *dir)
 	g_signal_connect(page->terminal,"button-press-event",G_CALLBACK(doButton),page);
 	g_signal_connect(page->terminal,"key-press-event",G_CALLBACK(on_key_press),NULL);
 	gtk_widget_show_all(mainWindow);
-	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)page);
+//	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)page);
+	g_object_set_data(G_OBJECT(page->swindow),"pageid",(gpointer)page);
 
 	gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-expand",true,NULL);
 	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,newpagenum);
@@ -216,9 +217,62 @@ void addPage(const char *dir)
 		}
 }
 
+//Thanks to xfce4-terminal for bits of this code
+//http://archive.xfce.org/src/apps/xfce4-terminal/0.6
+char *getPwd(pageStruct *page)
+{
+	char	buffer[4097];
+	char	*file;
+	char	*cwd;
+	int		length;
+	char	*retval=NULL;
+
+	if(page!=NULL)
+		{
+//make sure that we use linprocfs on all systems
+#if defined(__FreeBSD__)
+			file=g_strdup_printf("/compat/linux/proc/%d/cwd",page->pid);
+#elif defined(__NetBSD__) || defined(__OpenBSD__)
+			file=g_strdup_printf("/emul/linux/proc/%d/cwd",page->pid);
+#else
+			file=g_strdup_printf ("/proc/%d/cwd",page->pid);
+#endif
+			length=readlink(file,buffer,sizeof(buffer));
+			if(length>0 && *buffer == '/')
+				{
+					buffer[length]='\0';
+					retval=g_strdup(buffer);
+				}
+			else if(length==0)
+				{
+					cwd=g_get_current_dir();
+					if(G_LIKELY(cwd != NULL))
+						{
+							if (chdir(file)==0)
+								retval=g_get_current_dir();
+							g_free(cwd);
+						}
+				}
+			g_free (file);
+		}
+	if(retval==NULL)
+		retval=g_strdup(getenv("HOME"));
+	return(retval);
+}
+
 void newPage(GtkWidget *widget,gpointer data)
 {
-	addPage(getenv("HOME"));
+	pageStruct	*page=NULL;
+	int			pagenum=0;
+	GtkWidget	*vbox;
+	char		*wd=NULL;
+	
+	pagenum=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
+	vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,pagenum);
+	page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
+	wd=getPwd(page);
+	addPage(wd);
+	g_free(wd);
 }
 
 void buildMainGui(void)

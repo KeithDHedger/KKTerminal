@@ -1,4 +1,6 @@
 0.0.4
+Called from the command line opens new shell in current directory.
+New Shell now opens new tab in directory of current tab
 Window size/position now saved on exit.
 Set window size added to prefs ( eg  windowsize 1000 400 200 100 ).
 Added '--command,-e' option to inject command into shell ( injected into all shell if multiple folders given on command line ). 

@@ -29,7 +29,7 @@
 #include "gui.h"
 
 bool	singleOverRide=false;
-bool	openHome=false;
+bool	openTerm=false;
 
 int getWorkspaceNumber(void)
 {
@@ -85,8 +85,8 @@ void appStart(GApplication  *application,gpointer data)
 
 	buildMainGui();
 	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
-	if(openHome==true)
-		addPage(getenv("HOME"));
+	if(openTerm==true)
+		addPage(getenv("PWD"));
 	gtk_widget_show_all(mainWindow);
 }
 
@@ -140,7 +140,7 @@ int main(int argc,char **argv)
 	g_signal_connect(mainApp,"open",G_CALLBACK(open),NULL);
 
 	if(argc==1)
-		openHome=true;
+		openTerm=true;
 
 	status=g_application_run(mainApp,argc,argv);
 	g_object_unref(mainApp);

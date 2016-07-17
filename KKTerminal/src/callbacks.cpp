@@ -74,12 +74,9 @@ void exitShell(VteTerminal *vteterminal,gpointer pageptr)
 			pagenum=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
 			vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,pagenum);
 			page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
-			//gtk_widget_destroy(page->menu);
-			//gtk_widget_destroy(page->swindow);
-			//gtk_widget_destroy(page->tabVbox);
-			//gtk_widget_destroy(page->menu);
+			gtk_widget_destroy(page->menu);
+			gtk_widget_destroy(page->tabVbox);
 			gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
-			//gtk_widget_destroy(page->tabVbox);
 			g_free(page);
 		}
 	else
