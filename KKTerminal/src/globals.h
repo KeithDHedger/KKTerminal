@@ -84,6 +84,9 @@ extern GtkWidget		*fileMenu;
 //help
 extern GtkWidget		*helpMenu;
 
+//shells
+extern char				*fontAndSize;
+
 void doShutdown(GtkWidget* widget,gpointer data);
 void freeAndNull(char **ptr);
 int loadVarsFromFile(char *filepath,args *dataptr);

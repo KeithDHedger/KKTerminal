@@ -1,3 +1,7 @@
+0.0.5
+Window icon set for window pagers etc.
+Added font and size to prefs ( eg font	Monospace 10 ).
+
 0.0.4
 Called from the command line opens new shell in current directory.
 New Shell now opens new tab in directory of current tab

@@ -191,6 +191,8 @@ void addPage(const char *dir)
 	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
 #endif
 
+	vte_terminal_set_font_from_string ((VteTerminal *)page->terminal,fontAndSize);
+
 //dnd
 	gtk_drag_dest_set(page->terminal,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets(page->terminal);
@@ -202,7 +204,6 @@ void addPage(const char *dir)
 	g_signal_connect(page->terminal,"button-press-event",G_CALLBACK(doButton),page);
 	g_signal_connect(page->terminal,"key-press-event",G_CALLBACK(on_key_press),NULL);
 	gtk_widget_show_all(mainWindow);
-//	g_object_set_data(G_OBJECT(page->tabVbox),"pageid",(gpointer)page);
 	g_object_set_data(G_OBJECT(page->swindow),"pageid",(gpointer)page);
 
 	gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-expand",true,NULL);
@@ -296,6 +297,9 @@ void buildMainGui(void)
 	gtk_window_set_default_size((GtkWindow*)mainWindow,windowWidth,windowHeight);
 	if(windowX!=-1 && windowY!=-1)
 		gtk_window_move((GtkWindow *)mainWindow,windowX,windowY);
+
+	gtk_window_set_default_icon_name(PACKAGE);
+	gtk_window_set_icon_name((GtkWindow*)mainWindow,PACKAGE);
 
 	mainNotebook=gtk_notebook_new();
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);

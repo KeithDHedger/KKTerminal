@@ -79,6 +79,8 @@ void appStart(GApplication  *application,gpointer data)
 	system(prefsFile);
 	freeAndNull(&prefsFile);
 	asprintf(&prefsFile,"%s/.KKTerminal/kkterminal.rc",getenv("HOME"));	
+	asprintf(&fontAndSize,"Monospace 10");
+
 	loadVarsFromFile(prefsFile,mydata);
 	if(windowAllocData!=NULL)
 		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);

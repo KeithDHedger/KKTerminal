@@ -54,11 +54,15 @@ int					windowHeight=400;
 int					windowX=-1;
 int					windowY=-1;
 
+//shells
+char				*fontAndSize=NULL;
+
 args		mydata[]=
 				{
 					{"forecol",TYPESTRING,&foreColour},
 					{"backcol",TYPESTRING,&backColour},
 					{"windowsize",TYPESTRING,&windowAllocData},
+					{"font",TYPESTRING,&fontAndSize},
 					{NULL,0,NULL}
 				};
 
@@ -188,6 +192,7 @@ void doShutdown(GtkWidget* widget,gpointer data)
 	writeExitData();
 	g_free(prefsFile);
 	g_free(windowAllocData);
+	g_free(fontAndSize);
 	g_application_quit(mainApp);
 }
 
