@@ -74,13 +74,20 @@ void exitShell(VteTerminal *vteterminal,gpointer pageptr)
 			pagenum=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
 			vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,pagenum);
 			page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
-			g_free(page);
+			//gtk_widget_destroy(page->menu);
+			//gtk_widget_destroy(page->swindow);
+			//gtk_widget_destroy(page->tabVbox);
+			//gtk_widget_destroy(page->menu);
 			gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
+			//gtk_widget_destroy(page->tabVbox);
+			g_free(page);
 		}
 	else
 		{
 			pagenum=gtk_notebook_page_num((GtkNotebook*)mainNotebook,page->swindow);
 			gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
+			gtk_widget_destroy(page->menu);
+			gtk_widget_destroy(page->tabVbox);
 			g_free(page);
 		}
 	if(gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)==0)
@@ -122,29 +129,27 @@ gboolean on_key_press(GtkWidget *terminal,GdkEventKey *event)
 gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page)
 {
 	int			button,event_time;
-	GtkWidget	*menu=NULL;
 
 	gtk_widget_set_can_focus(page->terminal,true);
 	gtk_widget_grab_focus(page->terminal);
 
 ///* Ignore double-clicks and triple-clicks */
-  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
-    {
-    	menu=makeMenu(page);
-		gtk_widget_show_all(menu);
-		if (event)
-			{
-				button=event->button;
-				event_time=event->time;
-			}
-		else
-			{
-				button=0;
-				event_time=gtk_get_current_event_time();
+	if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+		{
+			gtk_widget_show_all(page->menu);
+			if (event)
+				{
+					button=event->button;
+					event_time=event->time;
+				}
+			else
+				{
+					button=0;
+					event_time=gtk_get_current_event_time();
 				}
 
-		gtk_menu_popup(GTK_MENU(menu),NULL,NULL,NULL,NULL,button,event_time);
-	}
+			gtk_menu_popup(GTK_MENU(page->menu),NULL,NULL,NULL,NULL,button,event_time);
+		}
 	return(false);
 }
 

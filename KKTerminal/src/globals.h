@@ -45,6 +45,7 @@ struct	pageStruct
 	GtkWidget			*swindow;
 	int					pid;
 	GtkWidget			*tabVbox;
+	GtkWidget			*menu;
 };
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};

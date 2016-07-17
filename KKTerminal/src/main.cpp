@@ -60,6 +60,7 @@ void activate(GApplication *application)
 {
 	if(mainWindow!=NULL)
 		gtk_window_present((GtkWindow*)mainWindow);
+
 }
 
 void appStart(GApplication  *application,gpointer data)
@@ -95,6 +96,7 @@ void open(GApplication *application,GFile** files,gint n_files,const gchar *hint
 			addPage(filepath);
 		}
 	g_application_release(application);
+	termCommand=NULL;
 }
 
 int main(int argc,char **argv)
@@ -133,7 +135,6 @@ int main(int argc,char **argv)
 		openHome=true;
 
 	status=g_application_run(mainApp,argc,argv);
-
 	g_object_unref(mainApp);
 	return(status);
 }

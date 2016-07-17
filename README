@@ -16,6 +16,10 @@ kkterminal -e ls /usr ~ /media
 Supports drag'n'drop of files onto tab to paste single quoted filepath.
 supports drag'n'drop of text into window ( no quoting ).
 
+Background/forground colours are set in the prefs file here:
+~/.KKTerminal/kkterminal.rc
+More prefs to come!
+
 The idea of this is to have a small USABLE terminal emulator without all the bloat of other emulators, suggestions, bug reports etc welecome, send to:
 keithhedger@keithhedger.darktech.org
 

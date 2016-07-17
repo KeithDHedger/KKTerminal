@@ -208,6 +208,7 @@ void addPage(const char *dir)
 	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,newpagenum);
 	gtk_widget_show_all(mainWindow);
 
+	page->menu=makeMenu(page);
 	if(termCommand!=NULL)
 		{
 			vte_terminal_feed_child((VteTerminal*)page->terminal,termCommand,-1);
