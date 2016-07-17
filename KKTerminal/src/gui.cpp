@@ -191,7 +191,13 @@ void addPage(const char *dir)
 	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
 #endif
 
+#ifdef _USEGTK3_
+	PangoFontDescription *pf;
+	pf=pango_font_description_from_string(fontAndSize);
+	vte_terminal_set_font ((VteTerminal *)page->terminal,pf);
+#else
 	vte_terminal_set_font_from_string ((VteTerminal *)page->terminal,fontAndSize);
+#endif
 
 //dnd
 	gtk_drag_dest_set(page->terminal,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
@@ -276,6 +282,18 @@ void newPage(GtkWidget *widget,gpointer data)
 	g_free(wd);
 }
 
+GtkWidget* newMenuItem(const char* menuname,const char* stockid)
+{
+	GtkWidget	*menu;
+#ifdef _USEGTK3_
+	menu=gtk_menu_item_new_with_mnemonic(menuname);
+#else
+	menu=gtk_image_menu_item_new_from_stock(stockid,NULL);
+#endif
+
+	return(menu);
+}
+
 void buildMainGui(void)
 {
 #ifdef _USEGTK3_
@@ -317,15 +335,18 @@ void buildMainGui(void)
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 //new
-	menuitem=gtk_menu_item_new_with_mnemonic("_New Shell");
+	//menuitem=gtk_menu_item_new_with_mnemonic("_New Shell");
+	menuitem=newMenuItem("_New Shell",GTK_STOCK_NEW);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(newPage),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //close
-	menuitem=gtk_menu_item_new_with_mnemonic("_Close Tab");
+//	menuitem=gtk_menu_item_new_with_mnemonic("_Close Tab");
+	menuitem=newMenuItem("_Close Tab",GTK_STOCK_CLOSE);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(exitShell),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //quit
-	menuitem=gtk_menu_item_new_with_mnemonic("_Quit");
+	//menuitem=gtk_menu_item_new_with_mnemonic("_Quit");
+	menuitem=newMenuItem("_Quit",GTK_STOCK_QUIT);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
@@ -335,7 +356,8 @@ void buildMainGui(void)
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
 //about
-	menuitem=gtk_menu_item_new_with_mnemonic("_About");
+	//menuitem=gtk_menu_item_new_with_mnemonic("_About");
+	menuitem=newMenuItem("_About",GTK_STOCK_ABOUT);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 

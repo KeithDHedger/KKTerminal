@@ -28,6 +28,11 @@
 
 #ifdef _USEGTK3_
 #define GTK_STOCK_CLOSE "window-close"
+#define GTK_STOCK_NEW "window-new"
+#define GTK_STOCK_OPEN "window-open"
+#define GTK_STOCK_QUIT "gtk-quit"
+#define GTK_STOCK_ABOUT "gtk-about"
+
 #define GDK_C GDK_KEY_C
 #define GDK_V GDK_KEY_V
 #endif
