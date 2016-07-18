@@ -63,6 +63,8 @@ void activate(GApplication *application)
 
 }
 
+int overideWid=-1;
+
 void appStart(GApplication  *application,gpointer data)
 {
 	g_application_hold(application);
@@ -82,8 +84,18 @@ void appStart(GApplication  *application,gpointer data)
 	asprintf(&fontAndSize,"Monospace 10");
 
 	loadVarsFromFile(prefsFile,mydata);
+
 	if(windowAllocData!=NULL)
 		sscanf(windowAllocData,"%i %i %i %i",(int*)&windowWidth,(int*)&windowHeight,(int*)&windowX,(int*)&windowY);
+
+	if(overideWidth>-1)
+		windowWidth=overideWidth;
+	if(overideHeight>-1)
+		windowHeight=overideHeight;
+	if(overideXPos>-1)
+		windowX=overideXPos;
+	if(overideYPos>-1)
+		windowY=overideYPos;
 
 	buildMainGui();
 	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
@@ -121,6 +133,10 @@ int main(int argc,char **argv)
 {
     {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
     {"command",'e',0,G_OPTION_ARG_STRING,&termCommand,"Command to inject into shell",NULL},
+    {"width",'w',0,G_OPTION_ARG_INT,&overideWid,"Use width from command line",NULL},
+    {"height",'g',0,G_OPTION_ARG_INT,&overideHeight,"Use height from command line",NULL},
+    {"xpos",'x',0,G_OPTION_ARG_INT,&overideXPos,"Use xpos from command line",NULL},
+    {"ypos",'y',0,G_OPTION_ARG_INT,&overideYPos,"Use ypos from command line",NULL},
     { NULL }
 };
 

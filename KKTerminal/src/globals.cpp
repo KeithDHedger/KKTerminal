@@ -54,6 +54,10 @@ int					windowWidth=800;
 int					windowHeight=400;
 int					windowX=-1;
 int					windowY=-1;
+int					overideWidth=-1;
+int					overideHeight=-1;
+int					overideXPos=-1;
+int					overideYPos=-1;
 
 //shells
 char				*fontAndSize=NULL;

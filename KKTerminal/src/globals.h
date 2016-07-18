@@ -76,6 +76,10 @@ extern int				windowWidth;
 extern int				windowHeight;
 extern int				windowX;
 extern int				windowY;
+extern int				overideWidth;
+extern int				overideHeight;
+extern int				overideXPos;
+extern int				overideYPos;
 
 extern GtkWidget		*mainWindow;
 extern GtkWidget		*mainNotebook;
