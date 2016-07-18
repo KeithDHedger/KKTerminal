@@ -121,6 +121,15 @@ void open(GApplication *application,GFile** files,gint n_files,const gchar *hint
 	termCommand=NULL;
 }
 
+//gboolean vers (const gchar *option_name,
+//                   const gchar *value,
+//                   gpointer data,
+//                   GError **error)
+//{
+//printf("1234\n");
+//return(true);
+//}
+
 int main(int argc,char **argv)
 {
 	GOptionContext	*context;
@@ -131,7 +140,7 @@ int main(int argc,char **argv)
 
 	GOptionEntry	entries[]=
 {
-    {"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
+    {"multiple",'m',0,G_OPTION_ARG_NONE,NULL,"Multiple instance mode",NULL},
     {"command",'e',0,G_OPTION_ARG_STRING,&termCommand,"Command to inject into shell",NULL},
     {"width",'w',0,G_OPTION_ARG_INT,&overideWid,"Use width from command line",NULL},
     {"height",'g',0,G_OPTION_ARG_INT,&overideHeight,"Use height from command line",NULL},
