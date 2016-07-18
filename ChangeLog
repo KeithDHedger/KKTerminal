@@ -1,4 +1,5 @@
 0.0.5
+Squeezed gtk3 tabs a bit more.
 Added standard hot keys to menu items.
 Changed to stock men items with icons for gtk2.
 Window icon set for window pagers etc.

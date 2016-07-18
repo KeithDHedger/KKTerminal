@@ -333,6 +333,11 @@ void buildMainGui(void)
 	g_object_set((GObject*)mainNotebook,"tab-vborder",0,NULL);
 #endif
 
+#ifdef _USEGTK3_
+	applyCSS((GtkWidget*)mainNotebook,tabBoxProvider);
+	gtk_style_context_reset_widgets(gdk_screen_get_default());
+#endif
+
 //menus
 	menuBar=gtk_menu_bar_new();
 //file menu
