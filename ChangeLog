@@ -1,4 +1,5 @@
 0.0.5
+Updated manpage.
 Added --width|-w, --height|-g, --xpos|-x, --ypos|-y to options to set width, heitgh startx and starty from command line overiding saved position.
 Squeezed gtk3 tabs a bit more.
 Added standard hot keys to menu items.
