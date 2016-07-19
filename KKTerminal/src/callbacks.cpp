@@ -22,6 +22,7 @@
 #include <vte/vte.h>
 #include <string.h>
 #include <gdk/gdkkeysyms.h>
+#include <stdlib.h>
 
 #include "globals.h"
 #include "gui.h"
@@ -162,3 +163,9 @@ void doAbout(GtkWidget* widget,gpointer data)
 
 	g_free(licence);
 }
+
+void doHelp(GtkWidget* widget,gpointer data)
+{
+	system("xdg-open http://khapplications.darktech.org/pages/kkterminal/kkterminal.html");
+}
+

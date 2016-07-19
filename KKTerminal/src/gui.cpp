@@ -141,8 +141,6 @@ void addPage(const char *dir)
 
 	char		*startterm[2]={0,0};
 
-//	loadVarsFromFile(prefsFile,mydata);
-
 	pageStruct	*page=(pageStruct*)malloc(sizeof(pageStruct));
 	page->terminal=vte_terminal_new();
 	vte_terminal_set_default_colors((VteTerminal*)page->terminal);
@@ -366,6 +364,10 @@ void buildMainGui(void)
 //about
 	menuitem=newMenuItem("_About",GTK_STOCK_ABOUT,0);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//online help
+	menuitem=newMenuItem("_Help",GTK_STOCK_HELP,0);
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doHelp),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //addmenubar

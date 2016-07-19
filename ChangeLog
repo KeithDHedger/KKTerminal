@@ -1,4 +1,6 @@
 0.0.5
+Added online help to help menu ( sic ).
+Fixed multiple instance segfault.
 Updated manpage.
 Added --width|-w, --height|-g, --xpos|-x, --ypos|-y to options to set width, heitgh startx and starty from command line overiding saved position.
 Squeezed gtk3 tabs a bit more.
