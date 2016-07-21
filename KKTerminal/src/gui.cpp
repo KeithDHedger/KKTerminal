@@ -222,72 +222,6 @@ void addPage(const char *dir)
 		}
 }
 
-//Thanks to xfce4-terminal for bits of this code
-//http://archive.xfce.org/src/apps/xfce4-terminal/0.6
-char *getPwd(pageStruct *page)
-{
-	char	buffer[4097];
-	char	*file;
-	char	*cwd;
-	int		length;
-	char	*retval=NULL;
-
-	if(page!=NULL)
-		{
-//make sure that we use linprocfs on all systems
-#if defined(__FreeBSD__)
-			file=g_strdup_printf("/compat/linux/proc/%d/cwd",page->pid);
-#elif defined(__NetBSD__) || defined(__OpenBSD__)
-			file=g_strdup_printf("/emul/linux/proc/%d/cwd",page->pid);
-#else
-			file=g_strdup_printf ("/proc/%d/cwd",page->pid);
-#endif
-			length=readlink(file,buffer,sizeof(buffer));
-			if(length>0 && *buffer == '/')
-				{
-					buffer[length]='\0';
-					retval=g_strdup(buffer);
-				}
-			else if(length==0)
-				{
-					cwd=g_get_current_dir();
-					if(G_LIKELY(cwd != NULL))
-						{
-							if (chdir(file)==0)
-								retval=g_get_current_dir();
-							g_free(cwd);
-						}
-				}
-			g_free (file);
-		}
-	
-	if(retval==NULL)
-		{
-			retval=g_get_current_dir();
-			if(retval==NULL)
-				retval=g_strdup(getenv("HOME"));
-		}
-	return(retval);
-}
-
-void newPage(GtkWidget *widget,gpointer data)
-{
-	pageStruct	*page=NULL;
-	int			pagenum=0;
-	GtkWidget	*vbox;
-	char		*wd=NULL;
-	
-	pagenum=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
-	if(pagenum>-1)
-		{
-			vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,pagenum);
-			page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
-		}
-	wd=getPwd(page);
-	addPage(wd);
-	g_free(wd);
-}
-
 GtkWidget* newMenuItem(const char* menuname,const char* stockid,char hotkey)
 {
 	GtkWidget	*menu;
@@ -297,7 +231,6 @@ GtkWidget* newMenuItem(const char* menuname,const char* stockid,char hotkey)
 	menu=gtk_image_menu_item_new_from_stock(stockid,NULL);
 #endif
 	if(hotkey>0)
-//		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,hotkey,(GdkModifierType)(GDK_CONTROL_MASK|GDK_SHIFT_MASK),GTK_ACCEL_VISIBLE);
 		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,hotkey,(GdkModifierType)(GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
 
 	return(menu);

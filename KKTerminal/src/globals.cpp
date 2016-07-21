@@ -206,3 +206,50 @@ void doShutdown(GtkWidget* widget,gpointer data)
 	g_application_quit(mainApp);
 }
 
+//Thanks to xfce4-terminal for bits of this code
+//http://archive.xfce.org/src/apps/xfce4-terminal/0.6
+char *getPwd(pageStruct *page)
+{
+	char	buffer[4097];
+	char	*file;
+	char	*cwd;
+	int		length;
+	char	*retval=NULL;
+
+	if(page!=NULL)
+		{
+//make sure that we use linprocfs on all systems
+#if defined(__FreeBSD__)
+			file=g_strdup_printf("/compat/linux/proc/%d/cwd",page->pid);
+#elif defined(__NetBSD__) || defined(__OpenBSD__)
+			file=g_strdup_printf("/emul/linux/proc/%d/cwd",page->pid);
+#else
+			file=g_strdup_printf ("/proc/%d/cwd",page->pid);
+#endif
+			length=readlink(file,buffer,sizeof(buffer));
+			if(length>0 && *buffer == '/')
+				{
+					buffer[length]='\0';
+					retval=g_strdup(buffer);
+				}
+			else if(length==0)
+				{
+					cwd=g_get_current_dir();
+					if(G_LIKELY(cwd != NULL))
+						{
+							if (chdir(file)==0)
+								retval=g_get_current_dir();
+							g_free(cwd);
+						}
+				}
+			g_free (file);
+		}
+	
+	if(retval==NULL)
+		{
+			retval=g_get_current_dir();
+			if(retval==NULL)
+				retval=g_strdup(getenv("HOME"));
+		}
+	return(retval);
+}

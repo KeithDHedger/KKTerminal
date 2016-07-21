@@ -19,6 +19,7 @@
  */
 
 #include <gtk/gtk.h>
+#include <vte/vte.h>
 
 #include "config.h"
 
@@ -34,5 +35,6 @@ gboolean on_key_press(GtkWidget *terminal,GdkEventKey *event);
 gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page);
 void doAbout(GtkWidget* widget,gpointer data);
 void doHelp(GtkWidget* widget,gpointer data);
+void newPage(GtkWidget *widget,gpointer data);
 
 #endif

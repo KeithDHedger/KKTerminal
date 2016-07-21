@@ -27,6 +27,7 @@
 
 #include "globals.h"
 #include "gui.h"
+#include "callbacks.h"
 
 bool	singleOverRide=false;
 bool	openTerm=false;

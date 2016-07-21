@@ -169,3 +169,21 @@ void doHelp(GtkWidget* widget,gpointer data)
 	system("xdg-open http://khapplications.darktech.org/pages/kkterminal/kkterminal.html");
 }
 
+void newPage(GtkWidget *widget,gpointer data)
+{
+	pageStruct	*page=NULL;
+	int			pagenum=0;
+	GtkWidget	*vbox;
+	char		*wd=NULL;
+	
+	pagenum=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
+	if(pagenum>-1)
+		{
+			vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,pagenum);
+			page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
+		}
+	wd=getPwd(page);
+	addPage(wd);
+	g_free(wd);
+}
+
