@@ -25,5 +25,6 @@
 void buildMainGui(void);
 void addPage(const char *dir);
 GtkWidget *makeMenu(pageStruct *page);
+void newPage(GtkWidget *widget,gpointer data);
 
 #endif

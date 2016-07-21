@@ -260,8 +260,13 @@ char *getPwd(pageStruct *page)
 				}
 			g_free (file);
 		}
+	
 	if(retval==NULL)
-		retval=g_strdup(getenv("HOME"));
+		{
+			retval=g_get_current_dir();
+			if(retval==NULL)
+				retval=g_strdup(getenv("HOME"));
+		}
 	return(retval);
 }
 
@@ -273,8 +278,11 @@ void newPage(GtkWidget *widget,gpointer data)
 	char		*wd=NULL;
 	
 	pagenum=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
-	vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,pagenum);
-	page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
+	if(pagenum>-1)
+		{
+			vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,pagenum);
+			page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
+		}
 	wd=getPwd(page);
 	addPage(wd);
 	g_free(wd);

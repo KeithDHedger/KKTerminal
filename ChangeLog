@@ -1,3 +1,11 @@
+0.0.6
+Completly redone options, kkterminal --help for details.
+Updated manpage.
+Added open new tab in ARG.
+Added open tab in PWD.
+Added run command in new tab..
+Added print help.
+
 0.0.5
 Added online help to help menu ( sic ).
 Fixed multiple instance segfault.

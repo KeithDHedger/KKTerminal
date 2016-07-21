@@ -1,4 +1,4 @@
-.TH "KKTERMINAL" "1" "0.0.5" "K. D. Hedger" ""
+.TH "KKTERMINAL" "1" "0.0.6" "K. D. Hedger" ""
 .SH "NAME"
 kkterminal - Manual page for kkterminal
 .br
@@ -14,10 +14,7 @@ KKTerminal is a simple small terminal emulator for gtk2/3.
 .br
 	Multiple instance mode
 .br
-\fB-e\fR, \fB--command\fR
-.br
-	Command to inject into shell
-.br
+
 \fB-w\fR, \fB--width\fR
 .br
 	Use width from command line
@@ -34,20 +31,39 @@ KKTerminal is a simple small terminal emulator for gtk2/3.
 .br
 	Use ypos from command line
 .br
+
+\fB-c\fR, \fB--command\fR=\fIARG\fR
+.br
+	Execute \fIARG\fR in new tab
+.br
+\fB-n\fR, \fB--new-tab\fR=\fIARG\fR
+.br
+	Open a new tab in \fIARG\fR
+.br
+
+\fB-t\fR, \fB--tab\fR
+.br
+	Open a new tab in PWD.
+.br
 .SH "EXAMPLES"
-Open new instance of kkterminal in '/usr. and list:
+Open new instance of kkterminal and list the contents of '/'
 .br
-	kkterminal -m -e ls /
-.br
-
-Open ~ and / in new tabs in running copy of kkterminal
-.br
-	kkterminal ~ /
+	kkterminal -m --command="ls /"
 .br
 
-Open new instance of kketeminal at pos 100,200 with width=800 and height=400
+Open /usr and / in new tabs in running copy of kkterminal
+.br
+	kkterminal --new-tab=/usr --new-tab=/
+.br
+
+Open new instance of kkterminal at pos 100,200 with width=800 and height=400
 .br
 	kkterminal -m -x 100 -y 200 -w 800 -g 400
+.br
+
+Bring kkterminal to front ( or start if not running )
+.br
+	kkterminal
 .br
 .SH "SEE ALSO"
 

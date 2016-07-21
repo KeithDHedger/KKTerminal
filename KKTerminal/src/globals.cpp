@@ -58,9 +58,14 @@ int					overideWidth=-1;
 int					overideHeight=-1;
 int					overideXPos=-1;
 int					overideYPos=-1;
+const char			**tabFolderv=NULL;
+const char			*tabFolder=NULL;
 
 //shells
 char				*fontAndSize=NULL;
+
+//options
+char				**execInNewTab=NULL;
 
 args		mydata[]=
 				{

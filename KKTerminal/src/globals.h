@@ -26,6 +26,8 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
+#define _DEBUGNAME_ "dterm"
+
 #ifdef _USEGTK3_
 #define GTK_STOCK_CLOSE "window-close"
 #define GTK_STOCK_NEW "window-new"
@@ -71,6 +73,9 @@ extern const char		*termCommand;
 extern char				*windowAllocData;
 extern GtkAccelGroup	*accGroup;
 
+//options
+extern char				**execInNewTab;
+
 //main mainWindow
 extern int				windowWidth;
 extern int				windowHeight;
@@ -80,6 +85,8 @@ extern int				overideWidth;
 extern int				overideHeight;
 extern int				overideXPos;
 extern int				overideYPos;
+extern const char		**tabFolderv;
+extern const char		*tabFolder;
 
 extern GtkWidget		*mainWindow;
 extern GtkWidget		*mainNotebook;
