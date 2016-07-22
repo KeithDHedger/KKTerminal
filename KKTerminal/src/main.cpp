@@ -79,7 +79,6 @@ void activate(GApplication *application)
 void appStart(GApplication  *application,gpointer data)
 {
 	g_application_hold(application);
-printf("start\n");
 #ifdef _USEGTK3_
 	char	*tabcss=NULL;
 
@@ -128,6 +127,11 @@ printf("start\n");
 			execInNewTab=NULL;
 		}
 	gtk_widget_show_all(mainWindow);
+	if(showMenuBar==true)
+		gtk_widget_show_all(menuBar);
+	else
+		gtk_widget_hide(menuBar);
+
 }
 
 
@@ -285,13 +289,9 @@ int main(int argc,char **argv)
 	sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,getWorkspaceNumber());
 #endif
 	if((singleOverRide==true) ||(singleUse==false))
-		{
-			mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_COMMAND_LINE));
-		}
+		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_COMMAND_LINE));
 	else
-		{
-			mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_HANDLES_COMMAND_LINE));
-		}
+		mainApp=g_application_new(dbusname,(GApplicationFlags)(G_APPLICATION_HANDLES_COMMAND_LINE));
 
 	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
 	g_signal_connect(mainApp,"startup",G_CALLBACK(appStart),NULL);
@@ -300,7 +300,6 @@ int main(int argc,char **argv)
 
 	copyargc=argc;
 	copyargv=argv;
-
 	if(argc==1)
 		openTerm=true;
 

@@ -1,4 +1,8 @@
 0.0.6
+Code clean.
+Shortcut keys now work when menu bar hidden.
+Added 'Hide Menu Bar' to 'View' menu.
+Added 'Toggle menu bar' to context menu.
 Completly redone options, kkterminal --help for details.
 Updated manpage.
 Added open new tab in ARG.

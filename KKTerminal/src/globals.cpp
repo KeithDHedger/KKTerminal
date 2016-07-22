@@ -20,8 +20,10 @@
  
 #include <string.h>
 #include <stdlib.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "globals.h"
+#include "callbacks.h"
 
 GtkWidget			*mainWindow;
 GtkWidget			*mainNotebook;
@@ -33,7 +35,8 @@ GtkStyleProvider	*tabBoxProvider;
 
 //file menu
 GtkWidget			*fileMenu;
-
+//view menu
+GtkWidget			*viewMenu;
 //help
 GtkWidget			*helpMenu;
 
@@ -58,8 +61,15 @@ int					overideWidth=-1;
 int					overideHeight=-1;
 int					overideXPos=-1;
 int					overideYPos=-1;
-const char			**tabFolderv=NULL;
-const char			*tabFolder=NULL;
+bool				showMenuBar=true;
+long				shortCuts[][3]={
+										{GDK_KEY_N,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newPage},
+										{GDK_KEY_W,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&exitShell},
+										{GDK_KEY_Q,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&doShutdown},
+										{0,0,0},
+										{0,0,0},
+										{-1,0,0}
+									};
 
 //shells
 char				*fontAndSize=NULL;
@@ -73,6 +83,7 @@ args		mydata[]=
 					{"backcol",TYPESTRING,&backColour},
 					{"windowsize",TYPESTRING,&windowAllocData},
 					{"font",TYPESTRING,&fontAndSize},
+					{"showmbar",TYPEBOOL,&showMenuBar},
 					{NULL,0,NULL}
 				};
 

@@ -36,5 +36,7 @@ gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page);
 void doAbout(GtkWidget* widget,gpointer data);
 void doHelp(GtkWidget* widget,gpointer data);
 void newPage(GtkWidget *widget,gpointer data);
+void toggleMenuBar(GtkWidget *widget,gpointer data);
+gboolean keyShortCut(GtkWidget *window,GdkEventKey *event,gpointer data);
 
 #endif

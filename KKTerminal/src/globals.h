@@ -26,7 +26,7 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-//#define _DEBUGNAME_ "dterm"
+#define _DEBUGNAME_ "dterm"
 
 #ifdef _USEGTK3_
 #define GTK_STOCK_CLOSE "window-close"
@@ -40,6 +40,9 @@
 #endif
 
 #define	APPEXECNAME "kkterminal"
+
+//menu "activate" signal callback
+typedef void (*activateCBPtr)(GtkWidget*,gpointer);
 
 struct	args
 {
@@ -59,6 +62,7 @@ struct	pageStruct
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
 enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
+enum {NEWPAGEMENU=0,CLOSEPAGEMENU,QUITMENU,ABOUTMENU,ONLINEHELPMENU};
 
 //aplication
 extern char				*foreColour;
@@ -85,12 +89,12 @@ extern int				overideWidth;
 extern int				overideHeight;
 extern int				overideXPos;
 extern int				overideYPos;
-extern const char		**tabFolderv;
-extern const char		*tabFolder;
 
 extern GtkWidget		*mainWindow;
 extern GtkWidget		*mainNotebook;
 extern GtkWidget		*menuBar;
+
+extern bool				showMenuBar;
 
 #ifdef _USEGTK3_
 extern GtkStyleProvider	*tabBoxProvider;
@@ -98,8 +102,12 @@ extern GtkStyleProvider	*tabBoxProvider;
 
 //file menu
 extern GtkWidget		*fileMenu;
+//view menu
+extern GtkWidget		*viewMenu;
 //help
 extern GtkWidget		*helpMenu;
+
+extern long shortCuts[][3];
 
 //shells
 extern char				*fontAndSize;

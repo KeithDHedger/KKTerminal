@@ -114,6 +114,10 @@ GtkWidget *makeMenu(pageStruct *page)
 
 	retwidg=gtk_menu_new ();
 
+	popmenuitem=gtk_menu_item_new_with_label("Toggle Menu Bar");
+	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(toggleMenuBar),page);
+	gtk_menu_shell_append(GTK_MENU_SHELL(retwidg),popmenuitem);
+
 	popmenuitem=gtk_menu_item_new_with_label("Copy");
 	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(copyFromTerm),page);
 	gtk_menu_shell_append(GTK_MENU_SHELL(retwidg),popmenuitem);
@@ -213,6 +217,10 @@ void addPage(const char *dir)
 	gtk_container_child_set((GtkContainer*)mainNotebook,page->swindow,"tab-expand",true,NULL);
 	gtk_notebook_set_current_page((GtkNotebook*)mainNotebook,newpagenum);
 	gtk_widget_show_all(mainWindow);
+	if(showMenuBar==true)
+		gtk_widget_show_all(menuBar);
+	else
+		gtk_widget_hide(menuBar);
 
 	page->menu=makeMenu(page);
 	if(termCommand!=NULL)
@@ -222,16 +230,19 @@ void addPage(const char *dir)
 		}
 }
 
-GtkWidget* newMenuItem(const char* menuname,const char* stockid,char hotkey)
+//GtkWidget* newMenuItem(const char* menuname,const char* stockid,char hotkey,GdkModifierType modkeys)
+GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum)
 {
+//printf("name=%s modkeys=%i\n",menuname,modkeys);
 	GtkWidget	*menu;
 #ifdef _USEGTK3_
 	menu=gtk_menu_item_new_with_mnemonic(menuname);
 #else
 	menu=gtk_image_menu_item_new_from_stock(stockid,NULL);
 #endif
-	if(hotkey>0)
-		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,hotkey,(GdkModifierType)(GDK_CONTROL_MASK),GTK_ACCEL_VISIBLE);
+	//if(hotkey>0)
+	if(shortCuts[shortnum][0]>0)
+		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,shortCuts[shortnum][0],(GdkModifierType)shortCuts[shortnum][1],GTK_ACCEL_VISIBLE);
 
 	return(menu);
 }
@@ -264,6 +275,8 @@ void buildMainGui(void)
 	accGroup=gtk_accel_group_new();
 	gtk_window_add_accel_group((GtkWindow*)mainWindow,accGroup);
 
+	g_signal_connect(G_OBJECT(mainWindow),"key-press-event",G_CALLBACK(keyShortCut),NULL);
+
 	mainNotebook=gtk_notebook_new();
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);
 
@@ -285,16 +298,27 @@ void buildMainGui(void)
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 //new
-	menuitem=newMenuItem("_New Shell",GTK_STOCK_NEW,'N');
+	menuitem=newMenuItem("_New Shell",GTK_STOCK_NEW,NEWPAGEMENU);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(newPage),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //close
-	menuitem=newMenuItem("_Close Tab",GTK_STOCK_CLOSE,'W');
+	menuitem=newMenuItem("_Close Tab",GTK_STOCK_CLOSE,CLOSEPAGEMENU);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(exitShell),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
 //quit
-	menuitem=newMenuItem("_Quit",GTK_STOCK_QUIT,'Q');
+	menuitem=newMenuItem("_Quit",GTK_STOCK_QUIT,QUITMENU);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+//view
+	viewMenu=gtk_menu_item_new_with_label("_View");
+	gtk_menu_item_set_use_underline((GtkMenuItem*)viewMenu,true);
+	menu=gtk_menu_new();
+	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewMenu),menu);
+//hide mbar
+	menuitem=gtk_menu_item_new_with_mnemonic("_Hide Menu Bar");
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleMenuBar),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //help
@@ -303,16 +327,17 @@ void buildMainGui(void)
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
 //about
-	menuitem=newMenuItem("_About",GTK_STOCK_ABOUT,0);
+	menuitem=newMenuItem("_About",GTK_STOCK_ABOUT,ABOUTMENU);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //online help
-	menuitem=newMenuItem("_Help",GTK_STOCK_HELP,0);
+	menuitem=newMenuItem("_Help",GTK_STOCK_HELP,ONLINEHELPMENU);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doHelp),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //addmenubar
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),fileMenu);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),viewMenu);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menuBar),helpMenu);
 	gtk_box_pack_start((GtkBox*)vbox,menuBar,false,false,0);
 	gtk_box_pack_start((GtkBox*)vbox,mainNotebook,true,true,0);
@@ -320,6 +345,10 @@ void buildMainGui(void)
 	gtk_container_add(GTK_CONTAINER(mainWindow),vbox);
 
 	gtk_widget_show_all(mainWindow);
+	if(showMenuBar==true)
+		gtk_widget_show_all(menuBar);
+	else
+		gtk_widget_hide(menuBar);
 }
 
 

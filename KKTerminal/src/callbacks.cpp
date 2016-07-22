@@ -187,3 +187,37 @@ void newPage(GtkWidget *widget,gpointer data)
 	g_free(wd);
 }
 
+void toggleMenuBar(GtkWidget *widget,gpointer data)
+{
+	showMenuBar=!showMenuBar;
+	if(showMenuBar==true)
+		gtk_widget_show_all(menuBar);
+	else
+		gtk_widget_hide(menuBar);
+}
+
+gboolean keyShortCut(GtkWidget *window,GdkEventKey *event,gpointer data)
+{
+	int				loop=0;
+	bool			gotKey=false;
+	activateCBPtr	acb;
+
+	if(event->type==GDK_KEY_PRESS)
+		{
+			while(shortCuts[loop][0]!=-1)
+				{
+					if(event->state==shortCuts[loop][1])
+						{
+							if(event->keyval==shortCuts[loop][0])
+								{
+									acb=(activateCBPtr)shortCuts[loop][2];
+									acb(NULL,NULL);
+								return(true);
+							}
+						}		
+					loop++;
+				}
+		}
+	return(false);
+}
+
