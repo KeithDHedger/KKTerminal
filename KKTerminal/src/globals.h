@@ -26,7 +26,7 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-#define _DEBUGNAME_ "dterm"
+//#define _DEBUGNAME_ "dterm"
 
 #ifdef _USEGTK3_
 #define GTK_STOCK_CLOSE "window-close"
