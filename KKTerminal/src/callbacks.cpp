@@ -221,3 +221,12 @@ gboolean keyShortCut(GtkWidget *window,GdkEventKey *event,gpointer data)
 	return(false);
 }
 
+void prevTab(GtkWidget* widget,gpointer data)
+{
+	gtk_notebook_prev_page((GtkNotebook*)mainNotebook);
+}
+
+void nextTab(GtkWidget* widget,gpointer data)
+{
+	gtk_notebook_next_page((GtkNotebook*)mainNotebook);
+}

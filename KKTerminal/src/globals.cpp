@@ -68,6 +68,8 @@ long				shortCuts[][3]={
 										{GDK_KEY_Q,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&doShutdown},
 										{0,0,0},
 										{0,0,0},
+										{GDK_KEY_Left,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&prevTab},
+										{GDK_KEY_Right,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&nextTab},
 										{-1,0,0}
 									};
 

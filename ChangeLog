@@ -1,4 +1,5 @@
 0.0.6
+Added tab navigation via menu or keyboard.
 Code clean.
 Shortcut keys now work when menu bar hidden.
 Added 'Hide Menu Bar' to 'View' menu.

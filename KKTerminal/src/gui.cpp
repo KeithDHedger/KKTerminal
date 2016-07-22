@@ -320,6 +320,15 @@ void buildMainGui(void)
 	menuitem=gtk_menu_item_new_with_mnemonic("_Hide Menu Bar");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleMenuBar),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
+//prevtab
+	menuitem=newMenuItem("_Previous Tab",GTK_STOCK_GO_BACK,PREVTABMENU);
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(prevTab),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+//next tab
+	menuitem=newMenuItem("_Next Tab",GTK_STOCK_GO_FORWARD,NEXTTABMENU);
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(nextTab),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //help
 	helpMenu=gtk_menu_item_new_with_label("_Help");

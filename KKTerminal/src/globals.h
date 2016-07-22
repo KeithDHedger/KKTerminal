@@ -35,6 +35,9 @@
 #define GTK_STOCK_QUIT "application-exit"
 #define GTK_STOCK_ABOUT "help-about"
 #define GTK_STOCK_HELP "help-browser"
+#define GTK_STOCK_GO_BACK "go-previous"
+#define GTK_STOCK_GO_FORWARD "go-next"
+
 #define GDK_C GDK_KEY_C
 #define GDK_V GDK_KEY_V
 #endif
@@ -62,7 +65,7 @@ struct	pageStruct
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
 enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
-enum {NEWPAGEMENU=0,CLOSEPAGEMENU,QUITMENU,ABOUTMENU,ONLINEHELPMENU};
+enum {NEWPAGEMENU=0,CLOSEPAGEMENU,QUITMENU,ABOUTMENU,ONLINEHELPMENU,PREVTABMENU,NEXTTABMENU};
 
 //aplication
 extern char				*foreColour;
