@@ -250,7 +250,6 @@ GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,con
 	GtkWidget	*menuhbox;
 	GtkWidget	*pad;
 	GtkWidget	*image;
-//	GtkWidget	*leftlabel;
 	GtkWidget	*ritelabel;
 
 	menu=gtk_menu_item_new_with_mnemonic(menuname);
@@ -343,15 +342,6 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(newPage),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
-//gtk_widget_destroy(gtk_bin_get_child (GTK_BIN (menuitem)));
-//GtkWidget	*mbox=createNewBox(NEWHBOX,false,0);
-//GtkWidget	*image=gtk_image_new_from_icon_name(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
-//
-//gtk_box_pack_start((GtkBox*)mbox,image,false,false,0);
-//gtk_box_pack_start((GtkBox*)mbox,gtk_label_new(" New Tab			Shift+Ctrl+N"),false,false,0);
-//gtk_container_add(GTK_CONTAINER(menuitem),mbox);
-
-#if 1
 //close
 	menuitem=newMenuItem("_Close Tab",GTK_STOCK_CLOSE,CLOSEPAGEMENU,"Shift+Ctrl+W");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(exitShell),NULL);
@@ -362,11 +352,6 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
-//menuitem=gtk_check_menu_item_new_with_label ("checkbox");
-//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
-
-#endif
 //view
 	viewMenu=gtk_menu_item_new_with_label("_View");
 	gtk_menu_item_set_use_underline((GtkMenuItem*)viewMenu,true);

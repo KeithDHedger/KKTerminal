@@ -1,4 +1,5 @@
 0.0.7
+Added -e/-x switch, executes all the rest of the command line in a new tab ( ALL args after this are swallowed ).
 Added 'iconsinmenu' to prefs, set to 1 to enable icons in gtk3 menus, 0 for standard ( boring! ) gtk3 menus.
 
 0.0.6

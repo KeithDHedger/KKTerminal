@@ -189,6 +189,18 @@ gint commandline (GApplication *application,GApplicationCommandLine *command_lin
 				{
 					for(int j=1;j<copyargc;j++)
 						{
+							if((strcmp(copyargv[j],"-e")==0) || (strcmp(copyargv[j],"-x")==0))
+								{
+									GString *str=g_string_new("");
+									for(int k=j+1;k<copyargc;k++)
+										g_string_append_printf(str,"%s ",copyargv[k]);
+									termCommand=str->str;
+									char *cwd=g_get_current_dir();
+									addPage(cwd);
+									g_free(cwd);
+									g_string_free(str,true);
+									return(0);
+								}
 							if((strcmp(copyargv[j],"--tab")==0) || (strcmp(copyargv[j],"-t")==0))
 								{
 									termCommand=NULL;
