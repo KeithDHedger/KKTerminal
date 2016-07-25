@@ -27,6 +27,9 @@
 /* Version number of package */
 #undef VERSION
 
+/* Use dev mode */
+#undef _DEVMODE_
+
 /* Use GTK3 */
 #undef _EXECSUFFIX_
 

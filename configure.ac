@@ -58,5 +58,9 @@ PKG_CHECK_MODULES(VTE,$VTE_MODULES,[],[AC_MSG_ERROR([No VTE dev files found ... 
 AC_SUBST(VTE_CFLAGS)
 AC_SUBST(VTE_LIBS)
 
+if test "$DEVMODE" = "yes"; then
+	AC_DEFINE([_DEVMODE_], [""], [Use dev mode])
+fi
+
 AC_OUTPUT(Makefile KKTerminal/app/Makefile)
 

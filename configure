@@ -4807,6 +4807,12 @@ fi
 
 
 
+if test "$DEVMODE" = "yes"; then
+
+$as_echo "#define _DEVMODE_ \"\"" >>confdefs.h
+
+fi
+
 ac_config_files="$ac_config_files Makefile KKTerminal/app/Makefile"
 
 cat >confcache <<\_ACEOF

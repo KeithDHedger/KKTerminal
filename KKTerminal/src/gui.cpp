@@ -230,19 +230,60 @@ void addPage(const char *dir)
 		}
 }
 
-//GtkWidget* newMenuItem(const char* menuname,const char* stockid,char hotkey,GdkModifierType modkeys)
-GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum)
+#ifdef _USEGTK3_
+void showidg (GtkWidget *widget)
 {
-//printf("name=%s modkeys=%i\n",menuname,modkeys);
+if(widget!=NULL)
+	printf("widget\n");
+	//gtk_style_context_add_provider(gtk_widget_get_style_context (widget),widgprovider,GTK_STYLE_PROVIDER_PRIORITY_USER);
+	if (GTK_IS_CONTAINER (widget))
+		gtk_container_forall (GTK_CONTAINER(widget),(GtkCallback)showidg,NULL);
+}
+#endif
+
+//GtkWidget* newMenuItem(const char* menuname,const char* stockid,char hotkey,GdkModifierType modkeys)
+GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,const char* hotkey)
+{
 	GtkWidget	*menu;
 #ifdef _USEGTK3_
+	char		*menulabel;
+	GtkWidget	*menuhbox;
+	GtkWidget	*pad;
+	GtkWidget	*image;
+//	GtkWidget	*leftlabel;
+	GtkWidget	*ritelabel;
+
 	menu=gtk_menu_item_new_with_mnemonic(menuname);
+	if(iconsInMenu==true)
+		{
+			gtk_widget_destroy(gtk_bin_get_child(GTK_BIN(menu)));
+			menuhbox=createNewBox(NEWHBOX,false,0);
+			pad=createNewBox(NEWHBOX,false,0);
+
+			image=gtk_image_new_from_icon_name(stockid,GTK_ICON_SIZE_MENU);
+			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
+
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(menuname),false,false,0);
+			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);
+
+			ritelabel=gtk_label_new(hotkey);
+			gtk_widget_set_sensitive(ritelabel,false);
+			gtk_box_pack_start(GTK_BOX(menuhbox),ritelabel,false,false,8);
+
+			gtk_container_add(GTK_CONTAINER(menu),menuhbox);
+		}
+	else
+		{
+			if(shortCuts[shortnum][0]>0)
+				gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,shortCuts[shortnum][0],(GdkModifierType)shortCuts[shortnum][1],GTK_ACCEL_VISIBLE);
+		}
+
 #else
 	menu=gtk_image_menu_item_new_from_stock(stockid,NULL);
-#endif
-	//if(hotkey>0)
 	if(shortCuts[shortnum][0]>0)
 		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,shortCuts[shortnum][0],(GdkModifierType)shortCuts[shortnum][1],GTK_ACCEL_VISIBLE);
+#endif
 
 	return(menu);
 }
@@ -298,19 +339,34 @@ void buildMainGui(void)
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(fileMenu),menu);
 //new
-	menuitem=newMenuItem("_New Shell",GTK_STOCK_NEW,NEWPAGEMENU);
+	menuitem=newMenuItem("_New Shell",GTK_STOCK_NEW,NEWPAGEMENU,"Shift+Ctrl+N");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(newPage),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+//gtk_widget_destroy(gtk_bin_get_child (GTK_BIN (menuitem)));
+//GtkWidget	*mbox=createNewBox(NEWHBOX,false,0);
+//GtkWidget	*image=gtk_image_new_from_icon_name(GTK_STOCK_NEW,GTK_ICON_SIZE_MENU);
+//
+//gtk_box_pack_start((GtkBox*)mbox,image,false,false,0);
+//gtk_box_pack_start((GtkBox*)mbox,gtk_label_new(" New Tab			Shift+Ctrl+N"),false,false,0);
+//gtk_container_add(GTK_CONTAINER(menuitem),mbox);
+
+#if 1
 //close
-	menuitem=newMenuItem("_Close Tab",GTK_STOCK_CLOSE,CLOSEPAGEMENU);
+	menuitem=newMenuItem("_Close Tab",GTK_STOCK_CLOSE,CLOSEPAGEMENU,"Shift+Ctrl+W");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(exitShell),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
 //quit
-	menuitem=newMenuItem("_Quit",GTK_STOCK_QUIT,QUITMENU);
+	menuitem=newMenuItem("_Quit",GTK_STOCK_QUIT,QUITMENU,"Shift+Ctrl+Q");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
+//menuitem=gtk_check_menu_item_new_with_label ("checkbox");
+//	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
+
+
+#endif
 //view
 	viewMenu=gtk_menu_item_new_with_label("_View");
 	gtk_menu_item_set_use_underline((GtkMenuItem*)viewMenu,true);
@@ -322,11 +378,11 @@ void buildMainGui(void)
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());
 //prevtab
-	menuitem=newMenuItem("_Previous Tab",GTK_STOCK_GO_BACK,PREVTABMENU);
+	menuitem=newMenuItem("_Previous Tab",GTK_STOCK_GO_BACK,PREVTABMENU,"Shift+Ctrl+Left");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(prevTab),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //next tab
-	menuitem=newMenuItem("_Next Tab",GTK_STOCK_GO_FORWARD,NEXTTABMENU);
+	menuitem=newMenuItem("_Next Tab",GTK_STOCK_GO_FORWARD,NEXTTABMENU,"Shift+Ctrl+Right");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(nextTab),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 
@@ -336,11 +392,11 @@ void buildMainGui(void)
 	menu=gtk_menu_new();
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(helpMenu),menu);
 //about
-	menuitem=newMenuItem("_About",GTK_STOCK_ABOUT,ABOUTMENU);
+	menuitem=newMenuItem("_About",GTK_STOCK_ABOUT,ABOUTMENU,NULL);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doAbout),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //online help
-	menuitem=newMenuItem("_Help",GTK_STOCK_HELP,ONLINEHELPMENU);
+	menuitem=newMenuItem("_Help",GTK_STOCK_HELP,ONLINEHELPMENU,NULL);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doHelp),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 

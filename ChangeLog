@@ -1,3 +1,6 @@
+0.0.7
+Added 'iconsinmenu' to prefs, set to 1 to enable icons in gtk3 menus, 0 for standard ( boring! ) gtk3 menus.
+
 0.0.6
 Added tab navigation via menu or keyboard.
 Code clean.

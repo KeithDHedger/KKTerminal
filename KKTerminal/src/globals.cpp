@@ -62,6 +62,7 @@ int					overideHeight=-1;
 int					overideXPos=-1;
 int					overideYPos=-1;
 bool				showMenuBar=true;
+bool				iconsInMenu=true;
 long				shortCuts[][3]={
 										{GDK_KEY_N,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newPage},
 										{GDK_KEY_W,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&exitShell},
@@ -86,6 +87,7 @@ args		mydata[]=
 					{"windowsize",TYPESTRING,&windowAllocData},
 					{"font",TYPESTRING,&fontAndSize},
 					{"showmbar",TYPEBOOL,&showMenuBar},
+					{"iconsinmenu",TYPEBOOL,&iconsInMenu},
 					{NULL,0,NULL}
 				};
 

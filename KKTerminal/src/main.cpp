@@ -283,8 +283,8 @@ int main(int argc,char **argv)
 
 	gtk_init(&argc,&argv);
 
-#ifdef _DEBUGNAME_
-	sinkReturn=asprintf(&dbusname,"org.keithhedger.%s",_DEBUGNAME_);
+#ifdef _DEVMODE_
+	sinkReturn=asprintf(&dbusname,"org.keithhedger.%s","devel");
 #else
 	sinkReturn=asprintf(&dbusname,"org.keithhedger%i." APPEXECNAME,getWorkspaceNumber());
 #endif

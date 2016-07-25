@@ -26,11 +26,9 @@
 #ifndef _GLOBALS_
 #define _GLOBALS_
 
-//#define _DEBUGNAME_ "dterm"
-
 #ifdef _USEGTK3_
 #define GTK_STOCK_CLOSE "window-close"
-#define GTK_STOCK_NEW "window-new"
+#define GTK_STOCK_NEW "document-new"
 #define GTK_STOCK_OPEN "window-open"
 #define GTK_STOCK_QUIT "application-exit"
 #define GTK_STOCK_ABOUT "help-about"
@@ -98,6 +96,7 @@ extern GtkWidget		*mainNotebook;
 extern GtkWidget		*menuBar;
 
 extern bool				showMenuBar;
+extern bool				iconsInMenu;
 
 #ifdef _USEGTK3_
 extern GtkStyleProvider	*tabBoxProvider;
