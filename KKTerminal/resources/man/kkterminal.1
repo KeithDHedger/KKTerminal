@@ -44,6 +44,10 @@ KKTerminal is a simple small terminal emulator for gtk2/3.
 .br
 	Open a new tab in PWD.
 .br
+\fB-e\fR, \fB-x\fR \fI...\fR
+.br
+	Consume the rest of the command line and execute it in a new tab.
+.br
 .SH "EXAMPLES"
 Open new instance of kkterminal and list the contents of '/'
 .br
@@ -63,6 +67,38 @@ Open new instance of kkterminal at pos 100,200 with width=800 and height=400
 Bring kkterminal to front ( or start if not running )
 .br
 	kkterminal
+.br
+
+Open a new tab, then run the rest of the command line in a new tab
+.br
+	kkterminal --tab -e man kkterminal
+.br
+.SH "FILES"
+~/.KKTerminal/kkterminal.rc
+.br
+
+forecol	white
+.br
+backcol	black
+.br
+windowsize	1311 345 382 1142
+.br
+font	Monospace 10
+.br
+showmbar	1
+.br
+iconsinmenu	1
+.br
+
+forecol/backcol set colours.
+.br
+windowsize is reset to current sindow size/position when exiting.
+.br
+font set fon and size.
+.br
+showmbar set via the main application.
+.br
+iconsinmenu set to 1 to show icons in menus in gtk3 or 0 to use standard gtk3 menus.
 .br
 .SH "SEE ALSO"
 
