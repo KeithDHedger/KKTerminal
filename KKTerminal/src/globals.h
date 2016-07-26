@@ -35,6 +35,9 @@
 #define GTK_STOCK_HELP "help-browser"
 #define GTK_STOCK_GO_BACK "go-previous"
 #define GTK_STOCK_GO_FORWARD "go-next"
+#define GTK_STOCK_PREFERENCES "preferences-system"
+#define GTK_STOCK_APPLY "_Apply"
+#define GTK_STOCK_CANCEL "_Cancel"
 
 #define GDK_C GDK_KEY_C
 #define GDK_V GDK_KEY_V

@@ -327,7 +327,7 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(exitShell),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //prefs
-	menuitem=newMenuItem("_New Shell",GTK_STOCK_PREFERENCES,PREFSMENU,"Shift+Ctrl+P");
+	menuitem=newMenuItem("_Preferences",GTK_STOCK_PREFERENCES,PREFSMENU,"Shift+Ctrl+P");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doPrefs),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //quit
