@@ -82,17 +82,17 @@ void appStart(GApplication  *application,gpointer data)
 #ifdef _USEGTK3_
 	char	*tabcss=NULL;
 
-	asprintf(&tabcss,"* {\n padding: %ipx;\n}\n",1);
+	sinkReturn=asprintf(&tabcss,"* {\n padding: %ipx;\n}\n",1);
 	tabBoxProvider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
 	gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
 	g_free(tabcss);
 #endif
 
-	asprintf(&prefsFile,"mkdir -p %s/.KKTerminal ||true",getenv("HOME"));
-	system(prefsFile);
+	sinkReturn=asprintf(&prefsFile,"mkdir -p %s/.KKTerminal ||true",getenv("HOME"));
+	sinkReturn=system(prefsFile);
 	freeAndNull(&prefsFile);
-	asprintf(&prefsFile,"%s/.KKTerminal/kkterminal.rc",getenv("HOME"));	
-	asprintf(&fontAndSize,"Monospace 10");
+	sinkReturn=asprintf(&prefsFile,"%s/.KKTerminal/kkterminal.rc",getenv("HOME"));	
+	sinkReturn=asprintf(&fontAndSize,"Monospace 10");
 
 	loadVarsFromFile(prefsFile,mydata);
 

@@ -25,28 +25,9 @@
 #include "config.h"
 #include "globals.h"
 #include "callbacks.h"
+#include "prefs.h"
 
-enum {NEWVBOX=0,NEWHBOX};
 unsigned 	labelNum=1;
-
-GtkWidget *createNewBox(int orient,bool homog,int spacing)
-{
-	GtkWidget	*retwidg=NULL;
-
-#ifdef _USEGTK3_
-	if(orient==NEWVBOX)
-		retwidg=gtk_box_new(GTK_ORIENTATION_VERTICAL,spacing);
-	else
-		retwidg=gtk_box_new(GTK_ORIENTATION_HORIZONTAL,spacing);
-	gtk_box_set_homogeneous((GtkBox*)retwidg,homog);
-#else
-	if(orient==NEWVBOX)
-		retwidg=gtk_vbox_new(homog,spacing);
-	else
-		retwidg=gtk_hbox_new(homog,spacing);
-#endif
-	return(retwidg);
-}
 
 #ifdef _USEGTK3_
 void applyCSS (GtkWidget *widget, GtkStyleProvider *widgprovider)
@@ -74,7 +55,7 @@ GtkWidget *makeNewTab(char *name,pageStruct *page)
 
 	pad=createNewBox(NEWHBOX,false,0);
 	gtk_container_set_border_width (GTK_CONTAINER (pad),0);
-	asprintf(&labeltext,"Shell %i",labelNum++);
+	sinkReturn=asprintf(&labeltext,"Shell %i",labelNum++);
 	label=gtk_label_new(labeltext);
 	g_free(labeltext);
 
@@ -341,12 +322,14 @@ void buildMainGui(void)
 	menuitem=newMenuItem("_New Shell",GTK_STOCK_NEW,NEWPAGEMENU,"Shift+Ctrl+N");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(newPage),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
 //close
 	menuitem=newMenuItem("_Close Tab",GTK_STOCK_CLOSE,CLOSEPAGEMENU,"Shift+Ctrl+W");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(exitShell),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
-
+//prefs
+	menuitem=newMenuItem("_New Shell",GTK_STOCK_PREFERENCES,PREFSMENU,"Shift+Ctrl+P");
+	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doPrefs),NULL);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 //quit
 	menuitem=newMenuItem("_Quit",GTK_STOCK_QUIT,QUITMENU,"Shift+Ctrl+Q");
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(doShutdown),NULL);
@@ -359,6 +342,7 @@ void buildMainGui(void)
 	gtk_menu_item_set_submenu(GTK_MENU_ITEM(viewMenu),menu);
 //hide mbar
 	menuitem=gtk_menu_item_new_with_mnemonic("_Hide Menu Bar");
+	gtk_widget_add_accelerator((GtkWidget *)menuitem,"activate",accGroup,shortCuts[TOGGLEMBARMENU][0],(GdkModifierType)shortCuts[TOGGLEMBARMENU][1],GTK_ACCEL_VISIBLE);
 	g_signal_connect(G_OBJECT(menuitem),"activate",G_CALLBACK(toggleMenuBar),NULL);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),menuitem);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu),gtk_separator_menu_item_new());

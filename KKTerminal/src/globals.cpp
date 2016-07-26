@@ -24,6 +24,7 @@
 
 #include "globals.h"
 #include "callbacks.h"
+#include "gui.h"
 
 GtkWidget			*mainWindow;
 GtkWidget			*mainNotebook;
@@ -71,6 +72,8 @@ long				shortCuts[][3]={
 										{0,0,0},
 										{GDK_KEY_Left,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&prevTab},
 										{GDK_KEY_Right,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&nextTab},
+										{GDK_KEY_H,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&toggleMenuBar},
+										{GDK_KEY_P,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&doPrefs},
 										{-1,0,0}
 									};
 

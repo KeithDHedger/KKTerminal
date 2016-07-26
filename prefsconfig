@@ -1,0 +1,8 @@
+checkbox:Show Menu Bar:showMenuBar
+checkbox:Show Icons:iconsInMenu
+textbox:Text Colour:foreColour
+textbox:Background Colour:backColour
+textbox:Font:fontAndSize
+
+
+

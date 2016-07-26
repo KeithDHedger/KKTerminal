@@ -166,7 +166,7 @@ void doAbout(GtkWidget* widget,gpointer data)
 
 void doHelp(GtkWidget* widget,gpointer data)
 {
-	system("xdg-open http://khapplications.darktech.org/pages/kkterminal/kkterminal.html");
+	sinkReturn=system("xdg-open http://khapplications.darktech.org/pages/kkterminal/kkterminal.html");
 }
 
 void newPage(GtkWidget *widget,gpointer data)
@@ -230,3 +230,16 @@ void nextTab(GtkWidget* widget,gpointer data)
 {
 	gtk_notebook_next_page((GtkNotebook*)mainNotebook);
 }
+
+
+
+void setPrefs(GtkWidget* widget,gpointer data)
+{
+}
+
+
+
+
+
+
+

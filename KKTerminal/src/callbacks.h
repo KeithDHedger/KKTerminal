@@ -40,5 +40,6 @@ void toggleMenuBar(GtkWidget *widget,gpointer data);
 gboolean keyShortCut(GtkWidget *window,GdkEventKey *event,gpointer data);
 void prevTab(GtkWidget* widget,gpointer data);
 void nextTab(GtkWidget* widget,gpointer data);
+void setPrefs(GtkWidget* widget,gpointer data);
 
 #endif
