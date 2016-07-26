@@ -26,6 +26,7 @@
 
 #include "globals.h"
 #include "gui.h"
+#include "prefs.h"
 #include "config.h"
 
 void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectionData *selection_data,guint info,guint32 time,gpointer user_data)
@@ -231,10 +232,20 @@ void nextTab(GtkWidget* widget,gpointer data)
 	gtk_notebook_next_page((GtkNotebook*)mainNotebook);
 }
 
-
-
 void setPrefs(GtkWidget* widget,gpointer data)
 {
+	if(data!=NULL)
+		{
+			showMenuBar=gtk_toggle_button_get_active((GtkToggleButton*)prefsCheck[SHOWMENUBARCHK]);
+			iconsInMenu=gtk_toggle_button_get_active((GtkToggleButton*)prefsCheck[SHOWICONSCHK]);
+			g_free(foreColour);
+			g_free(backColour);
+			g_free(fontAndSize);
+			foreColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[TEXTCOLOURTXT]));
+			backColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[BACKGROUNDCOLOURTXT]));
+			fontAndSize=strdup(gtk_entry_get_text((GtkEntry*)prefsText[FONTTXT]));
+		}
+	gtk_widget_destroy(prefsWindow);
 }
 
 
