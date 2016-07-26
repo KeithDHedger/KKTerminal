@@ -38,6 +38,7 @@ font	Monospace 10
 showmbar	1
 iconsinmenu	1
 
+Prefs can now be set from the preferences menu, changes to colours take effect on new shells, changes to menu icons ( gtk3 only ) take place on restart.
 More prefs to come!
 
 The idea of this is to have a small USABLE terminal emulator without all the bloat of other emulators, suggestions, bug reports etc welecome, send to:
