@@ -1,4 +1,6 @@
 0.0.7
+Fixed -e needing args to be quoted.
+Switched to getopts from gapplication version.
 Added prefs GUI.
 Added short cut to hide menubar.
 Updated manpage to include new features.

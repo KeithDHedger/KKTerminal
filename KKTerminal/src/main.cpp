@@ -24,6 +24,7 @@
 #include <sys/stat.h>
 #include <X11/Xatom.h>
 #include <gdk/gdkx.h>
+#include <getopt.h>
 
 #include "globals.h"
 #include "gui.h"
@@ -34,6 +35,20 @@ bool	openTerm=false;
 
 gchar	**copyargv;
 gint	copyargc;
+struct	option longOptions[]=
+	{
+		{"multiple",0,0,'n'},
+		{"width",1,0,'w'},
+		{"height",1,0,'g'},
+		{"xpos",1,0,'x'},
+		{"ypos",1,0,'y'},
+		{"command",1,0,'c'},
+		{"new-tab",1,0,'n'},
+		{"tab",0,0,'t'},
+		{"execute",0,0,'e'},
+		{"help",0,0,'h'},
+		{0, 0, 0, 0}
+	};
 
 void printargs(void)
 {
@@ -68,6 +83,30 @@ int getWorkspaceNumber(void)
 			XFree(data_return);
 		}
 	return retnum;
+}
+
+void printHelp(void)
+{
+	const char *help={"\
+Usage:\n\
+kkterminal [OPTION] ... [OPTION]\n\
+ -h, --help		Show help options\n\
+ -v, --version		Version\n\
+\n\
+ -m, --multiple		Multiple instance mode\n\
+ -w, --width		Use width from command line\n\
+ -g, --height		Use height from command line\n\
+ -x, --xpos		Use xpos from command line\n\
+ -y, --ypos		Use ypos from command line\n\
+\n\
+ -c, --command=ARG	Execute ARG in new tab\n\
+ -n, --new-tab=ARG	Open a new tab in ARG\n\
+ -t, --tab		Open a new tab in PWD.\n\
+ -e, --execute ...	Consume the rest of the command line and execute it in a new tab.\n\
+"};
+
+	printf("%s\n",help);
+	exit(0);
 }
 
 void activate(GApplication *application)
@@ -134,138 +173,69 @@ void appStart(GApplication  *application,gpointer data)
 
 }
 
-
 gint commandline (GApplication *application,GApplicationCommandLine *command_line,gpointer user_data)
 {
-	char**			newtab=NULL;
-	GOptionContext	*context;
-	GOptionEntry	entries[]=
-		{
-    		{"command",'c',0,G_OPTION_ARG_STRING_ARRAY,&execInNewTab,"Exec ARG in new tab","ARG"},
-    		{"new-tab",'n',0,G_OPTION_ARG_STRING_ARRAY,&newtab,"Open a new tab in ARG","ARG"},
-			{NULL}
-		};
+	int		c=0;
+	int		option_index=0;
+	char	*cwd;
+	GString *str;
 
+	optind=0;
 	copyargv=g_application_command_line_get_arguments(command_line,&copyargc);
 
 	if(mainWindow!=NULL)
 		{
 			gtk_window_present((GtkWindow*)mainWindow);
-
-			context=g_option_context_new(NULL);
-			g_option_context_set_ignore_unknown_options(context,TRUE);
-			g_option_context_add_main_entries(context,entries,NULL);
-			g_option_context_set_help_enabled(context,false); 
-			g_option_context_parse(context,&copyargc,&copyargv,NULL);
-
-			if(newtab!=NULL)
+			while (1)
 				{
-					int cnt=0;
-					while(newtab[cnt]!=NULL)
+					option_index=0;
+					c=getopt_long_only(copyargc,copyargv,"h?w:g:x:y:n:c:mte",longOptions,&option_index);
+					if (c==-1)
+						break;
+
+					switch (c)
 						{
-							termCommand=NULL;
-							addPage(newtab[cnt]);
-							cnt++;
+							case 'm':
+							case 'w':
+							case 'g':
+							case 'x':
+							case 'y':
+							break;
+
+							case 'h':
+								printHelp();
+								break;
+
+							case 'c':
+								termCommand=optarg;
+								newPage(NULL,NULL);
+								break;
+							case 'e':
+								str=g_string_new("");
+								for(int k=optind;k<copyargc;k++)
+									g_string_append_printf(str,"%s ",copyargv[k]);
+								termCommand=str->str;
+								cwd=g_get_current_dir();
+								addPage(cwd);
+								g_free(cwd);
+								g_string_free(str,true);
+								return(-1);
+								break;
+							case 'n':
+								termCommand=NULL;
+								addPage(optarg);
+								break;
+							case 't':
+								termCommand=NULL;
+								char *cwd=g_get_current_dir();
+								addPage(cwd);
+								g_free(cwd);
+								break;
 						}
-					g_strfreev(newtab);
-					newtab=NULL;
 				}
-			
-
-			if(execInNewTab!=NULL)
-				{
-					int cnt=0;
-					while(execInNewTab[cnt]!=NULL)
-						{
-							termCommand=execInNewTab[cnt];
-							newPage(NULL,NULL);
-							cnt++;
-						}
-					g_strfreev(execInNewTab);
-					execInNewTab=NULL;
-				}
-
-			if (copyargc>1)
-				{
-					for(int j=1;j<copyargc;j++)
-						{
-							if((strcmp(copyargv[j],"-e")==0) || (strcmp(copyargv[j],"-x")==0))
-								{
-									GString *str=g_string_new("");
-									for(int k=j+1;k<copyargc;k++)
-										g_string_append_printf(str,"%s ",copyargv[k]);
-									termCommand=str->str;
-									char *cwd=g_get_current_dir();
-									addPage(cwd);
-									g_free(cwd);
-									g_string_free(str,true);
-									return(0);
-								}
-							if((strcmp(copyargv[j],"--tab")==0) || (strcmp(copyargv[j],"-t")==0))
-								{
-									termCommand=NULL;
-									char *cwd=g_get_current_dir();
-									addPage(cwd);
-									g_free(cwd);
-								}
-						}
-			    }
-		}
-	return(0);
-}
-
-void printHelp(void)
-{
-	const char *help={"\
-Usage:\n\
-kkterminal [OPTION] ... [OPTION]\n\
- -h, --help		Show help options\n\
- -v, --version		Version\n\
-\n\
- -m, --multiple		Multiple instance mode\n\
- -w, --width		Use width from command line\n\
- -g, --height		Use height from command line\n\
- -x, --xpos		Use xpos from command line\n\
- -y, --ypos		Use ypos from command line\n\
-\n\
- -c, --command=ARG	Execute ARG in new tab\n\
- -n, --new-tab=ARG	Open a new tab in ARG\n\
- -t, --tab		Open a new tab in PWD.\n\
-"};
-
-	printf("%s\n",help);
-}
-
-gint doLocalArgs(GApplication *application,GVariantDict *options,gpointer user_data)
-{
-	bool			showversion=false;
-	bool			showhelp=false;
-	GOptionContext	*context;
-	GOptionEntry	entries[]=
-		{
-    		{"version",'v',0,G_OPTION_ARG_NONE,&showversion,"Version",NULL},
-    		{"help",'h',0,G_OPTION_ARG_NONE,&showhelp,"Help",NULL},
-			{NULL}
-		};
-
-	context=g_option_context_new(NULL);
-	g_option_context_set_ignore_unknown_options(context,TRUE);
-	g_option_context_add_main_entries(context,entries,NULL);
-	g_option_context_set_help_enabled(context,false); 
-	g_option_context_parse(context,&copyargc,&copyargv,NULL);
-
-	if(showhelp==true)
-		{
-			printHelp();
-			exit(0);
 		}
 
-	if(showversion==true)
-		{
-			printf("KKTerminal - Version %s\n",VERSION);
-			exit(0);
-		}
-	return(0);
+	return(-1);
 }
 
 int main(int argc,char **argv)
@@ -273,27 +243,56 @@ int main(int argc,char **argv)
 	char			*dbusname;
 	int				status;
 	char			 *sink;
+	int				c=0;
+	int				option_index=0;
+	char			*cwd;
+	GString			*str;
+	bool			loop=true;
 
 	singleOverRide=false;
-
-	GOptionContext	*context;
-	GOptionEntry	entries[]=
-		{
-    		{"multiple",'m',0,G_OPTION_ARG_NONE,&singleOverRide,"Multiple instance mode",NULL},
-			{"width",'w',0,G_OPTION_ARG_INT,&overideWidth,"Use width from command line",NULL},
-			{"height",'g',0,G_OPTION_ARG_INT,&overideHeight,"Use height from command line",NULL},
-			{"xpos",'x',0,G_OPTION_ARG_INT,&overideXPos,"Use xpos from command line",NULL},
-			{"ypos",'y',0,G_OPTION_ARG_INT,&overideYPos,"Use ypos from command line",NULL},
-			{NULL}
-		};
-
-	context=g_option_context_new(NULL);
-	g_option_context_set_ignore_unknown_options(context,TRUE);
-	g_option_context_add_main_entries(context,entries,NULL);
-	g_option_context_set_help_enabled(context,false); 
-	g_option_context_parse(context,&argc,&argv,NULL);
+	optind=0;
 
 	gtk_init(&argc,&argv);
+	copyargc=argc;
+	copyargv=argv;
+
+	while (loop)
+		{
+			option_index=0;
+			c=getopt_long_only(copyargc,copyargv,"h?w:g:x:y:n:c:mte",longOptions,&option_index);
+			if (c==-1)
+				break;
+
+			switch (c)
+				{
+					case 'h':
+					case '?':
+						printHelp();
+						exit(0);
+						break;
+
+					case 'e':
+						loop=false;
+						continue;
+						break;
+						
+					case 'm':
+						singleOverRide=true;
+						break;
+					case 'w':
+						overideWidth=atoi(optarg);
+						break;
+					case 'g':
+						overideHeight=atoi(optarg);
+						break;
+					case 'x':
+						overideXPos=atoi(optarg);
+						break;
+					case 'y':
+						overideYPos=atoi(optarg);
+						break;
+				}
+		}
 
 #ifdef _DEVMODE_
 	sinkReturn=asprintf(&dbusname,"org.keithhedger.%s","devel");
@@ -308,10 +307,8 @@ int main(int argc,char **argv)
 	g_signal_connect(mainApp,"activate",G_CALLBACK(activate),NULL);
 	g_signal_connect(mainApp,"startup",G_CALLBACK(appStart),NULL);
 	g_signal_connect(mainApp,"command-line",G_CALLBACK(commandline),NULL);
-	g_signal_connect(mainApp,"handle-local-options",G_CALLBACK(doLocalArgs),NULL);
 
-	copyargc=argc;
-	copyargv=argv;
+
 	if(argc==1)
 		openTerm=true;
 
