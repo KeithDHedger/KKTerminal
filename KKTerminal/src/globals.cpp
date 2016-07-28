@@ -50,6 +50,7 @@ GApplication		*mainApp;
 const char			*termCommand=NULL;
 char				*windowAllocData=NULL;
 GtkAccelGroup		*accGroup=NULL;
+bool				holdOpen=false;
 
 //main mainWindow
 int					windowWidth=800;

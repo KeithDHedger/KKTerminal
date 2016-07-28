@@ -62,6 +62,7 @@ struct	pageStruct
 	int					pid;
 	GtkWidget			*tabVbox;
 	GtkWidget			*menu;
+	bool				hold;
 };
 
 enum {TYPEINT=1,TYPESTRING,TYPEBOOL,TYPELIST};
@@ -78,6 +79,7 @@ extern GApplication		*mainApp;
 extern const char		*termCommand;
 extern char				*windowAllocData;
 extern GtkAccelGroup	*accGroup;
+extern bool				holdOpen;
 
 //options
 extern char				**execInNewTab;

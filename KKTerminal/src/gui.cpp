@@ -72,6 +72,7 @@ GtkWidget *makeNewTab(char *name,pageStruct *page)
 	gtk_container_add(GTK_CONTAINER(evbox),hbox);
 	gtk_container_set_border_width (GTK_CONTAINER (hbox),0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(exitShell),(void*)page);
+	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(exitShell),NULL);
 	//g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
 #ifdef _USEGTK3_
@@ -224,6 +225,7 @@ void addPage(const char *dir)
 		gtk_widget_hide(menuBar);
 
 	page->menu=makeMenu(page);
+	page->hold=holdOpen;
 	g_strfreev(startterm);
 	termCommand=NULL;
 }

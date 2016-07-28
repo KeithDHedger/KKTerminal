@@ -30,25 +30,28 @@
 #include "gui.h"
 #include "callbacks.h"
 
-bool	singleOverRide=false;
-bool	openTerm=false;
+bool		singleOverRide=false;
+bool		openTerm=false;
 
-gchar	**copyargv;
-gint	copyargc;
-struct	option longOptions[]=
-	{
-		{"multiple",0,0,'n'},
-		{"width",1,0,'w'},
-		{"height",1,0,'g'},
-		{"xpos",1,0,'x'},
-		{"ypos",1,0,'y'},
-		{"command",1,0,'c'},
-		{"new-tab",1,0,'n'},
-		{"tab",0,0,'t'},
-		{"execute",0,0,'e'},
-		{"help",0,0,'h'},
-		{0, 0, 0, 0}
-	};
+gchar		**copyargv;
+gint		copyargc;
+struct		option longOptions[]=
+		{
+			{"multiple",0,0,'n'},
+			{"width",1,0,'w'},
+			{"height",1,0,'g'},
+			{"xpos",1,0,'x'},
+			{"ypos",1,0,'y'},
+			{"command",1,0,'c'},
+			{"new-tab",1,0,'n'},
+			{"tab",0,0,'t'},
+			{"execute",0,0,'e'},
+			{"hold",0,0,'l'},
+			{"help",0,0,'h'},
+			{0, 0, 0, 0}
+		};
+
+const char	*shortOpts="h?w:g:x:y:n:c:lmte";
 
 void printargs(void)
 {
@@ -94,6 +97,7 @@ kkterminal [OPTION] ... [OPTION]\n\
  -v, --version		Version\n\
 \n\
  -m, --multiple		Multiple instance mode\n\
+ -l, --hold		Hold tab open afer last proc exits\n\
  -w, --width		Use width from command line\n\
  -g, --height		Use height from command line\n\
  -x, --xpos		Use xpos from command line\n\
@@ -189,22 +193,19 @@ gint commandline (GApplication *application,GApplicationCommandLine *command_lin
 			while (1)
 				{
 					option_index=0;
-					c=getopt_long_only(copyargc,copyargv,"h?w:g:x:y:n:c:mte",longOptions,&option_index);
+					c=getopt_long_only(copyargc,copyargv,shortOpts,longOptions,&option_index);
 					if (c==-1)
 						break;
 
 					switch (c)
 						{
-							case 'm':
-							case 'w':
-							case 'g':
-							case 'x':
-							case 'y':
-							break;
-
 							case 'h':
 								printHelp();
 								break;
+
+							case 'l':
+								holdOpen=true;
+								break;;
 
 							case 'c':
 								termCommand=optarg;
@@ -259,7 +260,7 @@ int main(int argc,char **argv)
 	while (loop)
 		{
 			option_index=0;
-			c=getopt_long_only(copyargc,copyargv,"h?w:g:x:y:n:c:mte",longOptions,&option_index);
+			c=getopt_long_only(copyargc,copyargv,shortOpts,longOptions,&option_index);
 			if (c==-1)
 				break;
 
@@ -276,6 +277,9 @@ int main(int argc,char **argv)
 						continue;
 						break;
 						
+					case 'l':
+						holdOpen=true;
+						break;;
 					case 'm':
 						singleOverRide=true;
 						break;

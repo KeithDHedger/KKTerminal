@@ -83,11 +83,14 @@ void exitShell(VteTerminal *vteterminal,gpointer pageptr)
 		}
 	else
 		{
-			pagenum=gtk_notebook_page_num((GtkNotebook*)mainNotebook,page->swindow);
-			gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
-			gtk_widget_destroy(page->menu);
-			gtk_widget_destroy(page->tabVbox);
-			g_free(page);
+			if(page->hold==false)
+				{
+					pagenum=gtk_notebook_page_num((GtkNotebook*)mainNotebook,page->swindow);
+					gtk_notebook_remove_page((GtkNotebook*)mainNotebook,pagenum);
+					gtk_widget_destroy(page->menu);
+					gtk_widget_destroy(page->tabVbox);
+					g_free(page);
+				}
 		}
 	if(gtk_notebook_get_n_pages((GtkNotebook*)mainNotebook)==0)
 		doShutdown(NULL,NULL);
