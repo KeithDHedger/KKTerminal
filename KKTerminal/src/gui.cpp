@@ -116,14 +116,14 @@ GtkWidget *makeMenu(pageStruct *page)
 
 void addPage(const char *dir)
 {
-	GtkWidget	*label;
-	int			newpagenum;
 #ifdef _USEGTK3_
 	GdkRGBA		colour;
 #else
 	GdkColor	colour;
 #endif
 
+	GtkWidget	*label;
+	int			newpagenum;
 	char		*startterm[2]={0,0};
 
 	pageStruct	*page=(pageStruct*)malloc(sizeof(pageStruct));
@@ -182,6 +182,10 @@ void addPage(const char *dir)
 	vte_terminal_set_font_from_string ((VteTerminal *)page->terminal,fontAndSize);
 #endif
 
+	vte_terminal_set_allow_bold ((VteTerminal*)page->terminal,allowBold);
+	gdk_color_parse(boldColour,&colour);
+	vte_terminal_set_color_bold ((VteTerminal *)page->terminal,&colour);
+
 //dnd
 	gtk_drag_dest_set(page->terminal,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
 	gtk_drag_dest_add_uri_targets(page->terminal);
@@ -208,6 +212,7 @@ void addPage(const char *dir)
 		{
 			vte_terminal_feed_child((VteTerminal*)page->terminal,termCommand,-1);
 			vte_terminal_feed_child((VteTerminal*)page->terminal,"\n",-1);
+			termCommand=NULL;
 		}
 }
 

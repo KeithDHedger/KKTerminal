@@ -1,4 +1,6 @@
 0.0.7
+Added 'Bold Colour' to prefs.
+Added 'Allow Bold' to prefs.
 Fixed -e needing args to be quoted.
 Switched to getopts from gapplication version.
 Added prefs GUI.

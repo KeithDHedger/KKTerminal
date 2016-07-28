@@ -69,8 +69,6 @@ enum {NOERR=0,NOOPENFILE,NOSAVEFILE};
 enum {NEWPAGEMENU=0,CLOSEPAGEMENU,QUITMENU,ABOUTMENU,ONLINEHELPMENU,PREVTABMENU,NEXTTABMENU,TOGGLEMBARMENU,PREFSMENU};
 
 //aplication
-extern char				*foreColour;
-extern char				*backColour;
 extern args				mydata[]; 
 extern char				*prefsFile;
 extern int				sinkReturn;
@@ -99,7 +97,13 @@ extern GtkWidget		*mainNotebook;
 extern GtkWidget		*menuBar;
 
 extern bool				showMenuBar;
+
+//prefs
 extern bool				iconsInMenu;
+extern bool				allowBold;
+extern char				*foreColour;
+extern char				*backColour;
+extern char				*boldColour;
 
 #ifdef _USEGTK3_
 extern GtkStyleProvider	*tabBoxProvider;

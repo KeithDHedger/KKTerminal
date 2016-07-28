@@ -1,7 +1,7 @@
 
 /******************************************************
 *
-*     ©keithhedger Tue 26 Jul 13:08:22 BST 2016
+*     ©keithhedger Thu 28 Jul 10:44:38 BST 2016
 *     kdhedger68713@gmail.com
 *
 *     prefs.cpp
@@ -12,8 +12,8 @@
 #include "callbacks.h"
 #include "prefs.h"
 
-GtkWidget	*prefsCheck[2];
-GtkWidget	*prefsText[3];
+GtkWidget	*prefsCheck[3];
+GtkWidget	*prefsText[4];
 GtkWidget	*prefsWindow;
 
 GtkWidget *createNewBox(int orient,bool homog,int spacing)
@@ -79,8 +79,10 @@ void doPrefs(GtkWidget* widget,gpointer data)
 
 	makePrefsCheck(SHOWMENUBARCHK,"Show Menu Bar",showMenuBar,vbox);
 	makePrefsCheck(SHOWICONSCHK,"Show Icons",iconsInMenu,vbox);
+	makePrefsCheck(ALLOWBOLDCHK,"Allow Bold",allowBold,vbox);
 	makePrefsText(TEXTCOLOURTXT,"Text Colour",foreColour,vbox);
 	makePrefsText(BACKGROUNDCOLOURTXT,"Background Colour",backColour,vbox);
+	makePrefsText(BOLDCOLOURTXT,"Bold Colour",boldColour,vbox);
 	makePrefsText(FONTTXT,"Font",fontAndSize,vbox);
 //buttons
 #ifdef _USEGTK3_

@@ -308,7 +308,6 @@ int main(int argc,char **argv)
 	g_signal_connect(mainApp,"startup",G_CALLBACK(appStart),NULL);
 	g_signal_connect(mainApp,"command-line",G_CALLBACK(commandline),NULL);
 
-
 	if(argc==1)
 		openTerm=true;
 

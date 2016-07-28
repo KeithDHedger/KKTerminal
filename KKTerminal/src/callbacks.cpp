@@ -238,11 +238,14 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		{
 			showMenuBar=gtk_toggle_button_get_active((GtkToggleButton*)prefsCheck[SHOWMENUBARCHK]);
 			iconsInMenu=gtk_toggle_button_get_active((GtkToggleButton*)prefsCheck[SHOWICONSCHK]);
+			allowBold=gtk_toggle_button_get_active((GtkToggleButton*)prefsCheck[ALLOWBOLDCHK]);
 			g_free(foreColour);
 			g_free(backColour);
 			g_free(fontAndSize);
+			g_free(boldColour);
 			foreColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[TEXTCOLOURTXT]));
 			backColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[BACKGROUNDCOLOURTXT]));
+			boldColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[BOLDCOLOURTXT]));
 			fontAndSize=strdup(gtk_entry_get_text((GtkEntry*)prefsText[FONTTXT]));
 		}
 	gtk_widget_destroy(prefsWindow);

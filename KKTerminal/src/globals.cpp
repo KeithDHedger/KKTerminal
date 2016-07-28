@@ -42,8 +42,6 @@ GtkWidget			*viewMenu;
 GtkWidget			*helpMenu;
 
 //aplication
-char				*foreColour=strdup("#000000");
-char				*backColour=strdup("#ffffff");
 char				*sinkReturnStr;
 char				*prefsFile=NULL;
 int					sinkReturn;
@@ -63,7 +61,14 @@ int					overideHeight=-1;
 int					overideXPos=-1;
 int					overideYPos=-1;
 bool				showMenuBar=true;
+
+//prefs
 bool				iconsInMenu=true;
+bool				allowBold=true;
+char				*foreColour=strdup("black");
+char				*backColour=strdup("white");
+char				*boldColour=strdup("black");
+
 long				shortCuts[][3]={
 										{GDK_KEY_N,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newPage},
 										{GDK_KEY_W,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&exitShell},
@@ -91,6 +96,8 @@ args		mydata[]=
 					{"font",TYPESTRING,&fontAndSize},
 					{"showmbar",TYPEBOOL,&showMenuBar},
 					{"iconsinmenu",TYPEBOOL,&iconsInMenu},
+					{"allowbold",TYPEBOOL,&allowBold},
+					{"boldcolour",TYPESTRING,&boldColour},
 					{NULL,0,NULL}
 				};
 
