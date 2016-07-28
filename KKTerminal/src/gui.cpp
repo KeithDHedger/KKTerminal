@@ -117,9 +117,13 @@ GtkWidget *makeMenu(pageStruct *page)
 void addPage(const char *dir)
 {
 #ifdef _USEGTK3_
-	GdkRGBA		colour;
+	GdkRGBA		forecolour;
+	GdkRGBA		backcolour;
+	GdkRGBA		boldcolour;
 #else
-	GdkColor	colour;
+	GdkColor	forecolour;
+	GdkColor	backcolour;
+	GdkColor	boldcolour;
 #endif
 
 	GtkWidget	*label;
@@ -145,24 +149,29 @@ void addPage(const char *dir)
 
 //gdk_rgba_parse
 #ifdef _USEGTK3_
-	gdk_rgba_parse(&colour,(const gchar*)foreColour);
+	gdk_rgba_parse(&forecolour,(const gchar*)foreColour);
+	gdk_rgba_parse(&backcolour,(const gchar*)backColour);
+	gdk_rgba_parse(&boldcolour,(const gchar*)boldColour);
+
 #ifdef _VTEVERS290_
-	vte_terminal_set_color_foreground_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&colour);
+	vte_terminal_set_color_foreground_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&forecolour);
+	vte_terminal_set_color_background_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&backcolour);
+	vte_terminal_set_color_bold_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&boldcolour);
 #else
-	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkRGBA*)&colour);
-#endif
-	gdk_rgba_parse(&colour,(const gchar*)backColour);
-#ifdef _VTEVERS290_
-	vte_terminal_set_color_background_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&colour);
-#else
-	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkRGBA*)&colour);
+	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkRGBA*)&forecolour);
+	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkRGBA*)&backcolour);
+	vte_terminal_set_color_bold((VteTerminal*)page->terminal,(const GdkRGBA*)&boldcolour);
 #endif
 #else
-	gdk_color_parse((const gchar*)foreColour,&colour);
-	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkColor*)&colour);
-	gdk_color_parse((const gchar*)backColour,&colour);
-	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkColor*)&colour);
+	gdk_color_parse((const gchar*)foreColour,&forecolour);
+	gdk_color_parse((const gchar*)backColour,&backcolour);
+	gdk_color_parse((const gchar*)boldColour,&boldcolour);
+	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkColor*)&forecolour);
+	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkColor*)&backcolour);
+	vte_terminal_set_color_bold ((VteTerminal *)page->terminal,&boldcolour);
 #endif
+
+	vte_terminal_set_allow_bold ((VteTerminal*)page->terminal,allowBold);
 
 #ifdef _USEGTK3_
 #ifdef _VTEVERS290_
@@ -181,10 +190,6 @@ void addPage(const char *dir)
 #else
 	vte_terminal_set_font_from_string ((VteTerminal *)page->terminal,fontAndSize);
 #endif
-
-	vte_terminal_set_allow_bold ((VteTerminal*)page->terminal,allowBold);
-	gdk_color_parse(boldColour,&colour);
-	vte_terminal_set_color_bold ((VteTerminal *)page->terminal,&colour);
 
 //dnd
 	gtk_drag_dest_set(page->terminal,GTK_DEST_DEFAULT_ALL,NULL,0,GDK_ACTION_COPY);
