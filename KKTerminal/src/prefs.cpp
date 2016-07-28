@@ -1,7 +1,7 @@
 
 /******************************************************
 *
-*     ©keithhedger Thu 28 Jul 10:44:38 BST 2016
+*     ©keithhedger Thu 28 Jul 12:03:11 BST 2016
 *     kdhedger68713@gmail.com
 *
 *     prefs.cpp
@@ -80,6 +80,7 @@ void doPrefs(GtkWidget* widget,gpointer data)
 	makePrefsCheck(SHOWMENUBARCHK,"Show Menu Bar",showMenuBar,vbox);
 	makePrefsCheck(SHOWICONSCHK,"Show Icons",iconsInMenu,vbox);
 	makePrefsCheck(ALLOWBOLDCHK,"Allow Bold",allowBold,vbox);
+	gtk_box_pack_start(GTK_BOX(vbox),createNewBox(NEWHBOX,false,0),true,true,10);
 	makePrefsText(TEXTCOLOURTXT,"Text Colour",foreColour,vbox);
 	makePrefsText(BACKGROUNDCOLOURTXT,"Background Colour",backColour,vbox);
 	makePrefsText(BOLDCOLOURTXT,"Bold Colour",boldColour,vbox);

@@ -1,10 +1,8 @@
 checkbox:Show Menu Bar:showMenuBar
 checkbox:Show Icons:iconsInMenu
 checkbox:Allow Bold:allowBold
+addspace:10
 textbox:Text Colour:foreColour
 textbox:Background Colour:backColour
 textbox:Bold Colour:boldColour
 textbox:Font:fontAndSize
-
-
-

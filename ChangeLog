@@ -1,4 +1,5 @@
 0.0.7
+Tabs now close when last proc terminates.
 Added 'Bold Colour' to prefs.
 Added 'Allow Bold' to prefs.
 Fixed -e needing args to be quoted.

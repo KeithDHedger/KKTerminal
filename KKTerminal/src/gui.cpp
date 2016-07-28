@@ -127,8 +127,10 @@ void addPage(const char *dir)
 #endif
 
 	GtkWidget	*label;
+	GSpawnFlags	spawnflags=(GSpawnFlags)(G_SPAWN_CHILD_INHERITS_STDIN|G_SPAWN_SEARCH_PATH);
 	int			newpagenum;
-	char		*startterm[2]={0,0};
+	gchar		**startterm=NULL;
+	int			argcp;
 
 	pageStruct	*page=(pageStruct*)malloc(sizeof(pageStruct));
 	page->terminal=vte_terminal_new();
@@ -145,7 +147,16 @@ void addPage(const char *dir)
 	newpagenum=gtk_notebook_append_page((GtkNotebook*)mainNotebook,page->swindow,label);
 	gtk_notebook_set_tab_reorderable((GtkNotebook*)mainNotebook,page->swindow,true);
 
-	startterm[0]=vte_get_user_shell();
+	if(termCommand!=NULL)
+		{
+			g_shell_parse_argv(termCommand,&argcp,&startterm,NULL);
+		}
+	else
+		{
+			startterm=(char**)calloc(2,sizeof(char*));
+			startterm[0]=vte_get_user_shell();
+			startterm[1]=NULL;
+		}
 
 //gdk_rgba_parse
 #ifdef _USEGTK3_
@@ -175,12 +186,12 @@ void addPage(const char *dir)
 
 #ifdef _USEGTK3_
 #ifdef _VTEVERS290_
-	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
+	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)spawnflags),NULL,NULL,&page->pid,NULL);
 #else
-	vte_terminal_spawn_sync((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)(G_SPAWN_DEFAULT|G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL,NULL);
+	vte_terminal_spawn_sync((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)spawnflags,NULL,NULL,&page->pid,NULL,NULL);
 #endif
 #else
-	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)(G_SPAWN_LEAVE_DESCRIPTORS_OPEN),NULL,NULL,&page->pid,NULL);
+	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)spawnflags,NULL,NULL,&page->pid,NULL);
 #endif
 
 #ifdef _USEGTK3_
@@ -213,12 +224,8 @@ void addPage(const char *dir)
 		gtk_widget_hide(menuBar);
 
 	page->menu=makeMenu(page);
-	if(termCommand!=NULL)
-		{
-			vte_terminal_feed_child((VteTerminal*)page->terminal,termCommand,-1);
-			vte_terminal_feed_child((VteTerminal*)page->terminal,"\n",-1);
-			termCommand=NULL;
-		}
+	g_strfreev(startterm);
+	termCommand=NULL;
 }
 
 #ifdef _USEGTK3_
