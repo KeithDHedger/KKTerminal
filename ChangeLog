@@ -1,3 +1,6 @@
+0.1.0
+First release.
+
 0.0.7
 Added '--hold' option to hold the tab open.
 Tabs now close when last proc terminates.
