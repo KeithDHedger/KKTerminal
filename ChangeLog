@@ -1,5 +1,5 @@
 0.1.1
-Added "-s ARG" switch to command line.
+Added "-s ARG" switch to command line ( see help or man page ).
 
 0.1.0
 First release.

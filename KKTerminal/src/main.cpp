@@ -110,7 +110,8 @@ kkterminal [OPTION] ... [OPTION]\n\
  -e, --execute ...	Consume the rest of the command line and execute it in a new tab.\n\
 \n\
  -s, --codeset		Set the encoding ( default=UTF-8 ).\n\
- 			The codeset effects all tabs opened after setting.\
+ 			The codeset effects all tabs opened after setting.\n\
+			The last codeset used is remembered.\
 "};
 
 	printf("%s\n",help);
