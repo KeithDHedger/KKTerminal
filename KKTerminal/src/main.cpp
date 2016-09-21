@@ -47,11 +47,12 @@ struct		option longOptions[]=
 			{"tab",0,0,'t'},
 			{"execute",0,0,'e'},
 			{"hold",0,0,'l'},
+			{"codeset",1,0,'s'},
 			{"help",0,0,'h'},
 			{0, 0, 0, 0}
 		};
 
-const char	*shortOpts="h?w:g:x:y:n:c:lmte";
+const char	*shortOpts="h?w:g:x:y:n:c:s:lmte";
 
 void printargs(void)
 {
@@ -107,6 +108,9 @@ kkterminal [OPTION] ... [OPTION]\n\
  -n, --new-tab=ARG	Open a new tab in ARG\n\
  -t, --tab		Open a new tab in PWD.\n\
  -e, --execute ...	Consume the rest of the command line and execute it in a new tab.\n\
+\n\
+ -s, --codeset		Set the encoding ( default=UTF-8 ).\n\
+ 			The codeset effects all tabs opened after setting.\
 "};
 
 	printf("%s\n",help);
@@ -227,10 +231,16 @@ gint commandline (GApplication *application,GApplicationCommandLine *command_lin
 								addPage(optarg);
 								break;
 							case 't':
-								termCommand=NULL;
-								char *cwd=g_get_current_dir();
-								addPage(cwd);
-								g_free(cwd);
+								{
+									termCommand=NULL;
+									char *cwd=g_get_current_dir();
+									addPage(cwd);
+									g_free(cwd);
+								}
+								break;
+							case 's':
+								free(codeset);
+								codeset=strdup(optarg);
 								break;
 						}
 				}

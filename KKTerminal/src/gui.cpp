@@ -169,10 +169,12 @@ void addPage(const char *dir)
 	vte_terminal_set_color_foreground_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&forecolour);
 	vte_terminal_set_color_background_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&backcolour);
 	vte_terminal_set_color_bold_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&boldcolour);
+	vte_terminal_set_encoding ((VteTerminal *)page->terminal,codeset);
 #else
 	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkRGBA*)&forecolour);
 	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkRGBA*)&backcolour);
 	vte_terminal_set_color_bold((VteTerminal*)page->terminal,(const GdkRGBA*)&boldcolour);
+	vte_terminal_set_encoding ((VteTerminal *)page->terminal,codeset,NULL);
 #endif
 #else
 	gdk_color_parse((const gchar*)foreColour,&forecolour);
@@ -181,6 +183,7 @@ void addPage(const char *dir)
 	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkColor*)&forecolour);
 	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkColor*)&backcolour);
 	vte_terminal_set_color_bold ((VteTerminal *)page->terminal,&boldcolour);
+	vte_terminal_set_encoding ((VteTerminal *)page->terminal,codeset);
 #endif
 
 	vte_terminal_set_allow_bold ((VteTerminal*)page->terminal,allowBold);

@@ -106,6 +106,7 @@ extern bool				allowBold;
 extern char				*foreColour;
 extern char				*backColour;
 extern char				*boldColour;
+extern char				*codeset;
 
 #ifdef _USEGTK3_
 extern GtkStyleProvider	*tabBoxProvider;

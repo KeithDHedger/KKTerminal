@@ -69,6 +69,7 @@ bool				allowBold=true;
 char				*foreColour=strdup("black");
 char				*backColour=strdup("white");
 char				*boldColour=strdup("black");
+char				*codeset=strdup("UTF-8");
 
 long				shortCuts[][3]={
 										{GDK_KEY_N,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newPage},
@@ -99,6 +100,7 @@ args		mydata[]=
 					{"iconsinmenu",TYPEBOOL,&iconsInMenu},
 					{"allowbold",TYPEBOOL,&allowBold},
 					{"boldcolour",TYPESTRING,&boldColour},
+					{"codeset",TYPESTRING,&codeset},
 					{NULL,0,NULL}
 				};
 
