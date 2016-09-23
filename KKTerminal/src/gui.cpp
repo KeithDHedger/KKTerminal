@@ -236,15 +236,15 @@ void addPage(const char *dir)
 #ifdef _USEGTK3_
 void showidg (GtkWidget *widget)
 {
-if(widget!=NULL)
-	printf("widget\n");
+//if(widget!=NULL)
+//	printf("widget\n");
 	//gtk_style_context_add_provider(gtk_widget_get_style_context (widget),widgprovider,GTK_STYLE_PROVIDER_PRIORITY_USER);
 	if (GTK_IS_CONTAINER (widget))
 		gtk_container_forall (GTK_CONTAINER(widget),(GtkCallback)showidg,NULL);
 }
 #endif
 
-//GtkWidget* newMenuItem(const char* menuname,const char* stockid,char hotkey,GdkModifierType modkeys)
+
 GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,const char* hotkey)
 {
 	GtkWidget	*menu;
@@ -254,6 +254,7 @@ GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,con
 	GtkWidget	*pad;
 	GtkWidget	*image;
 	GtkWidget	*ritelabel;
+	char		*labelwithspace;
 
 	menu=gtk_menu_item_new_with_mnemonic(menuname);
 	if(iconsInMenu==true)
@@ -265,8 +266,10 @@ GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,con
 			image=gtk_image_new_from_icon_name(stockid,GTK_ICON_SIZE_MENU);
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
-			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(menuname),false,false,0);
+			//gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new(" "),false,false,0);
+			asprintf(&labelwithspace," %s",menuname);
+			gtk_box_pack_start(GTK_BOX(menuhbox),gtk_label_new_with_mnemonic(labelwithspace),false,false,0);
+			free(labelwithspace);
 			gtk_box_pack_start(GTK_BOX(menuhbox),pad,true,true,0);
 
 			ritelabel=gtk_label_new(hotkey);
@@ -275,17 +278,12 @@ GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,con
 
 			gtk_container_add(GTK_CONTAINER(menu),menuhbox);
 		}
-	else
-		{
-			if(shortCuts[shortnum][0]>0)
-				gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,shortCuts[shortnum][0],(GdkModifierType)shortCuts[shortnum][1],GTK_ACCEL_VISIBLE);
-		}
 
 #else
 	menu=gtk_image_menu_item_new_from_stock(stockid,NULL);
+#endif
 	if(shortCuts[shortnum][0]>0)
 		gtk_widget_add_accelerator((GtkWidget *)menu,"activate",accGroup,shortCuts[shortnum][0],(GdkModifierType)shortCuts[shortnum][1],GTK_ACCEL_VISIBLE);
-#endif
 
 	return(menu);
 }
