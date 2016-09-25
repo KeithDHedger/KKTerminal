@@ -45,7 +45,6 @@ struct		option longOptions[]=
 			{"command",1,0,'c'},
 			{"new-tab",1,0,'n'},
 			{"tab",0,0,'t'},
-			{"execute",0,0,'e'},
 			{"hold",0,0,'l'},
 			{"codeset",1,0,'s'},
 			{"help",0,0,'h'},
@@ -107,7 +106,7 @@ kkterminal [OPTION] ... [OPTION]\n\
  -c, --command=ARG	Execute ARG in new tab\n\
  -n, --new-tab=ARG	Open a new tab in ARG\n\
  -t, --tab		Open a new tab in PWD.\n\
- -e, --execute ...	Consume the rest of the command line and execute it in a new tab.\n\
+ -e ...			Consume the rest of the command line and execute it in a new tab.\n\
 \n\
  -s, --codeset		Set the encoding ( default=UTF-8 ).\n\
  			The codeset effects all tabs opened after setting.\n\
@@ -306,6 +305,8 @@ int main(int argc,char **argv)
 					case 'y':
 						overideYPos=atoi(optarg);
 						break;
+
+
 				}
 		}
 

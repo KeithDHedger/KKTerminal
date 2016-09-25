@@ -1,4 +1,5 @@
 0.1.1
+Removed '--execute' option use short option '-e' instead.
 Fixed menu shortcuts not working in gtk3 when showing icons in menu.
 Added "-s ARG" switch to command line ( see help or man page ).
 
