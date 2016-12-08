@@ -264,6 +264,7 @@ GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,con
 			pad=createNewBox(NEWHBOX,false,0);
 
 			image=gtk_image_new_from_icon_name(stockid,GTK_ICON_SIZE_MENU);
+			gtk_image_set_pixel_size ((GtkImage*)image,16);
 			gtk_box_pack_start((GtkBox*)menuhbox,image,false,false,0);
 
 			asprintf(&labelwithspace," %s",menuname);
