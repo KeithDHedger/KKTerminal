@@ -1,4 +1,5 @@
 0.1.1
+Fixed editor position not being on screen at start up.
 Fixed wrong sized icons in menus and toolbar for certain themes in gtk3 version.
 Removed '--execute' option use short option '-e' instead.
 Fixed menu shortcuts not working in gtk3 when showing icons in menu.

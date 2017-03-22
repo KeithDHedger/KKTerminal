@@ -53,6 +53,27 @@ struct		option longOptions[]=
 
 const char	*shortOpts="h?w:g:x:y:n:c:s:lmte";
 
+char* oneLiner(const char *command)
+{
+	FILE	*fp=NULL;
+	char	*retstr=(char*)calloc(1,256);
+
+	fp=popen(command,"r");
+	if(fp!=NULL)
+		{
+			sinkReturnStr=fgets(retstr,256,fp);
+			pclose(fp);
+		}
+	if(sinkReturnStr==NULL)
+		free(retstr);
+	else
+		{
+			if(retstr[strlen(retstr)-1]=='\n')
+				retstr[strlen(retstr)-1]=0;
+		}
+	return(retstr);
+}
+
 void printargs(void)
 {
   if ( copyargc > 1)
@@ -125,6 +146,9 @@ void activate(GApplication *application)
 
 void appStart(GApplication  *application,gpointer data)
 {
+	char	*scrwid;
+	char	*scrhite;
+
 	g_application_hold(application);
 #ifdef _USEGTK3_
 	char	*tabcss=NULL;
@@ -154,6 +178,17 @@ void appStart(GApplication  *application,gpointer data)
 		windowX=overideXPos;
 	if(overideYPos>-1)
 		windowY=overideYPos;
+
+	scrwid=oneLiner("xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $3}'");
+	scrhite=oneLiner("xdpyinfo | awk -F'[ x]+' '/dimensions:/{print $4}'");
+
+	if(atoi(scrwid)<windowX)
+		windowX=10;
+	if(atoi(scrhite)<windowY)
+		windowY=10;
+
+	free(scrwid);
+	free(scrhite);
 
 	buildMainGui();
 	g_signal_connect(G_OBJECT(mainWindow),"delete-event",G_CALLBACK(doShutdown),NULL);
