@@ -111,12 +111,15 @@ void pasteToTermWithQuotes(GtkWidget* widget,pageStruct *page)
 	char	*qtxt;
 	gchar	*txt=gtk_clipboard_wait_for_text (mainClipboard);
 
-	asprintf(&qtxt,"\"%s\"",txt);
-	gtk_clipboard_set_text(mainClipboard,qtxt,-1);
-	vte_terminal_paste_clipboard((VteTerminal*)page->terminal);
-	gtk_clipboard_set_text(mainClipboard,txt,-1);
+	if(txt!=NULL)
+		{
+			asprintf(&qtxt,"\"%s\"",txt);
+			gtk_clipboard_set_text(mainClipboard,qtxt,-1);
+			vte_terminal_paste_clipboard((VteTerminal*)page->terminal);
+			gtk_clipboard_set_text(mainClipboard,txt,-1);
 
-	free(qtxt);
+			free(qtxt);
+		}
 	free(txt);
 }
 
