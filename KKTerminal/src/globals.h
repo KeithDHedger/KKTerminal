@@ -80,6 +80,7 @@ extern const char		*termCommand;
 extern char				*windowAllocData;
 extern GtkAccelGroup	*accGroup;
 extern bool				holdOpen;
+extern GtkClipboard		*mainClipboard;
 
 //options
 extern char				**execInNewTab;

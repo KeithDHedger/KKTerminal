@@ -1,4 +1,6 @@
 0.1.1
+Code clean.
+Added "Paste In Quotes" to context menu. 
 Fixed gtk3 tab size again!
 Fixed editor position not being on screen at start up.
 Fixed wrong sized icons in menus and toolbar for certain themes in gtk3 version.

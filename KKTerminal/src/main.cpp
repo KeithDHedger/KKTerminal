@@ -152,20 +152,8 @@ void appStart(GApplication  *application,gpointer data)
 	g_application_hold(application);
 #ifdef _USEGTK3_
 	char	*tabcss=NULL;
-//	sinkReturn=asprintf(&tabcss,"* {\n padding: %ipx 0px;\nfont-weight: normal;\n}\n",0);
 
-//	sinkReturn=asprintf(&tabcss,"* {\n padding: %ipx 0px;\n margin: 1px 1px\n} \
-//	 notebook tab label {\
-//      padding: 0px 0px;\
-//      font-weight: normal;\
-//      font-size: 8px;\
-//      color: black;\
-//      }\n",0);
-
-sinkReturn=asprintf(&tabcss,"* {\n padding: %ipx 0px;\n  margin: 0px 0px;\n}\n",0);
-
-//	sinkReturn=asprintf(&tabcss,"* {\n padding: %ipx;\nborder-width: 0;\n}\n.notebook tab {\n\n   padding: 1000px 2000px 1000px 2000px;\n\n   border-radius: 80px;\n\n   background-color: blue;\n\n}\n\n",1);
-
+	sinkReturn=asprintf(&tabcss,"* {\n padding: %ipx 0px;\n  margin: 0px 0px;\n}\n",0);
 	tabBoxProvider=GTK_STYLE_PROVIDER(gtk_css_provider_new());
 	gtk_css_provider_load_from_data((GtkCssProvider*)tabBoxProvider,tabcss,-1,NULL);
 	g_free(tabcss);
@@ -226,6 +214,7 @@ sinkReturn=asprintf(&tabcss,"* {\n padding: %ipx 0px;\n  margin: 0px 0px;\n}\n",
 	else
 		gtk_widget_hide(menuBar);
 
+	mainClipboard=gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
 }
 
 gint commandline (GApplication *application,GApplicationCommandLine *command_line,gpointer user_data)

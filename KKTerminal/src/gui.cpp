@@ -73,7 +73,6 @@ GtkWidget *makeNewTab(char *name,pageStruct *page)
 	gtk_container_set_border_width (GTK_CONTAINER (hbox),0);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(exitShell),(void*)page);
 	g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(exitShell),NULL);
-	//g_signal_connect(G_OBJECT(evbox),"button-press-event",G_CALLBACK(tabPopUp),(void*)page);
 
 #ifdef _USEGTK3_
 	applyCSS(evbox,tabBoxProvider);
@@ -106,6 +105,10 @@ GtkWidget *makeMenu(pageStruct *page)
 
 	popmenuitem=gtk_menu_item_new_with_label("Paste");
 	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(pasteToTerm),page);
+	gtk_menu_shell_append(GTK_MENU_SHELL(retwidg),popmenuitem);
+
+	popmenuitem=gtk_menu_item_new_with_label("Paste In Quotes");
+	g_signal_connect(G_OBJECT(popmenuitem),"activate",G_CALLBACK(pasteToTermWithQuotes),page);
 	gtk_menu_shell_append(GTK_MENU_SHELL(retwidg),popmenuitem);
 
 	popmenuitem=gtk_menu_item_new_with_label("Select All");
@@ -236,9 +239,6 @@ void addPage(const char *dir)
 #ifdef _USEGTK3_
 void showidg (GtkWidget *widget)
 {
-//if(widget!=NULL)
-//	printf("widget\n");
-	//gtk_style_context_add_provider(gtk_widget_get_style_context (widget),widgprovider,GTK_STYLE_PROVIDER_PRIORITY_USER);
 	if (GTK_IS_CONTAINER (widget))
 		gtk_container_forall (GTK_CONTAINER(widget),(GtkCallback)showidg,NULL);
 }
@@ -404,8 +404,3 @@ void buildMainGui(void)
 	else
 		gtk_widget_hide(menuBar);
 }
-
-
-
-
-

@@ -106,6 +106,19 @@ void pasteToTerm(GtkWidget* widget,pageStruct *page)
 	vte_terminal_paste_clipboard((VteTerminal*)page->terminal);
 }
 
+void pasteToTermWithQuotes(GtkWidget* widget,pageStruct *page)
+{
+	char	*qtxt;
+	gchar	*txt=gtk_clipboard_wait_for_text (mainClipboard);
+
+	asprintf(&qtxt,"\"%s\"",txt);
+	gtk_clipboard_set_text(mainClipboard,qtxt,-1);
+	vte_terminal_paste_clipboard((VteTerminal*)page->terminal);
+
+	free(qtxt);
+	free(txt);
+}
+
 void selectAllInTerm(GtkWidget* widget,pageStruct *page)
 {
 	vte_terminal_select_all((VteTerminal*)page->terminal);
@@ -253,10 +266,3 @@ void setPrefs(GtkWidget* widget,gpointer data)
 		}
 	gtk_widget_destroy(prefsWindow);
 }
-
-
-
-
-
-
-

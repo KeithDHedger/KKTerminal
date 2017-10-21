@@ -51,6 +51,7 @@ const char			*termCommand=NULL;
 char				*windowAllocData=NULL;
 GtkAccelGroup		*accGroup=NULL;
 bool				holdOpen=false;
+GtkClipboard		*mainClipboard;
 
 //main mainWindow
 int					windowWidth=800;
@@ -134,19 +135,6 @@ void saveVarsToFile(char *filepath,args *dataptr)
 							case TYPEBOOL:
 								fprintf(fd,"%s	%i\n",dataptr[cnt].name,(int)*(bool*)dataptr[cnt].data);
 								break;
-//							case TYPELIST:
-//								list=*(GSList**)((dataptr[cnt].data));
-//								if(g_slist_length(list)>maxFRHistory)
-//									list=g_slist_nth(list,g_slist_length(list)-maxFRHistory);
-//								while(list!=NULL)
-//									{
-//										if(strlen((char*)list->data)>0)
-//											{
-//												fprintf(fd,"%s\t%s\n",dataptr[cnt].name,(char*)list->data);
-//											}
-//										list=list->next;
-//									}
-//								break;
 						}
 					cnt++;
 				}
