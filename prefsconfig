@@ -1,8 +1,29 @@
-checkbox:Show Menu Bar:showMenuBar
-checkbox:Show Icons:iconsInMenu
-checkbox:Allow Bold:allowBold
+BASE:Prefs
+WINDOWTITLE:Preferences
+#NOBOXCODE
+
+DONAME:doPrefs
+INCLUDE:"globals.h"
+INCLUDE:"callbacks.h"
+
+checkbox:SHOWMENUBARCHK:Show Menu Bar:showMenuBar
+checkbox:SHOWICONSCHK:Show Icons:iconsInMenu
+checkbox:ALLOWBOLDCHK:Allow Bold:allowBold
+checkbox:USESINGLECHK:Use Single Quotes:useSingleQuotes
+
 addspace:10
-textbox:Text Colour:foreColour
-textbox:Background Colour:backColour
-textbox:Bold Colour:boldColour
-textbox:Font:fontAndSize
+
+textbox:TEXTCOLOURTXT:Text Colour:foreColour
+textbox:BACKGROUNDCOLOURTXT:Background Colour:backColour
+textbox:BOLDCOLOURTXT:Bold Colour:boldColour
+textbox:FONTTXT:Font:fontAndSize
+
+VARIABLE:bool	showMenuBar=true:extern
+VARIABLE:bool	iconsInMenu=true:extern
+VARIABLE:bool	allowBold=true:extern
+VARIABLE:bool	useSingleQuotes=true:extern
+
+VARIABLE:char	*foreColour="white":extern
+VARIABLE:char	*backColour="black":extern
+VARIABLE:char	*boldColour="red":extern
+VARIABLE:char	*fontAndSize="Monospace 10":extern

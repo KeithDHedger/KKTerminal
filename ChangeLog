@@ -1,4 +1,5 @@
 0.1.1
+Added "Use Single Quotes" to prefs for pasting into terminal quoted text, default is double quotes.
 Code clean.
 Added "Paste In Quotes" to context menu. 
 Fixed gtk3 tab size again!

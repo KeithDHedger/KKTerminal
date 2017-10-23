@@ -108,12 +108,16 @@ void pasteToTerm(GtkWidget* widget,pageStruct *page)
 
 void pasteToTermWithQuotes(GtkWidget* widget,pageStruct *page)
 {
+	char	quotetype='"';
 	char	*qtxt;
 	gchar	*txt=gtk_clipboard_wait_for_text (mainClipboard);
 
+	if(useSingleQuotes==true)
+		quotetype='\'';
+
 	if(txt!=NULL)
 		{
-			asprintf(&qtxt,"\"%s\"",txt);
+			asprintf(&qtxt,"%c%s%c",quotetype,txt,quotetype);
 			gtk_clipboard_set_text(mainClipboard,qtxt,-1);
 			vte_terminal_paste_clipboard((VteTerminal*)page->terminal);
 			gtk_clipboard_set_text(mainClipboard,txt,-1);
@@ -254,11 +258,12 @@ void nextTab(GtkWidget* widget,gpointer data)
 
 void setPrefs(GtkWidget* widget,gpointer data)
 {
-	if(data!=NULL)
+	if((long)data==(long)-1)
 		{
 			showMenuBar=gtk_toggle_button_get_active((GtkToggleButton*)prefsCheck[SHOWMENUBARCHK]);
 			iconsInMenu=gtk_toggle_button_get_active((GtkToggleButton*)prefsCheck[SHOWICONSCHK]);
 			allowBold=gtk_toggle_button_get_active((GtkToggleButton*)prefsCheck[ALLOWBOLDCHK]);
+			useSingleQuotes=gtk_toggle_button_get_active((GtkToggleButton*)prefsCheck[USESINGLECHK]);
 			g_free(foreColour);
 			g_free(backColour);
 			g_free(fontAndSize);
@@ -267,6 +272,9 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			backColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[BACKGROUNDCOLOURTXT]));
 			boldColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[BOLDCOLOURTXT]));
 			fontAndSize=strdup(gtk_entry_get_text((GtkEntry*)prefsText[FONTTXT]));
+			gtk_widget_destroy(prefsWindow);
 		}
-	gtk_widget_destroy(prefsWindow);
+
+	if((long)data==(long)-2)
+		gtk_widget_destroy(prefsWindow);
 }

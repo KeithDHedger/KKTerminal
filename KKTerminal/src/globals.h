@@ -104,6 +104,7 @@ extern bool				showMenuBar;
 //prefs
 extern bool				iconsInMenu;
 extern bool				allowBold;
+extern bool				useSingleQuotes;
 extern char				*foreColour;
 extern char				*backColour;
 extern char				*boldColour;

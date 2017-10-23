@@ -67,6 +67,7 @@ bool				showMenuBar=true;
 //prefs
 bool				iconsInMenu=true;
 bool				allowBold=true;
+bool				useSingleQuotes=false;
 char				*foreColour=strdup("black");
 char				*backColour=strdup("white");
 char				*boldColour=strdup("black");
@@ -100,6 +101,7 @@ args		mydata[]=
 					{"showmbar",TYPEBOOL,&showMenuBar},
 					{"iconsinmenu",TYPEBOOL,&iconsInMenu},
 					{"allowbold",TYPEBOOL,&allowBold},
+					{"usesingle",TYPEBOOL,&useSingleQuotes},
 					{"boldcolour",TYPESTRING,&boldColour},
 					{"codeset",TYPESTRING,&codeset},
 					{NULL,0,NULL}
