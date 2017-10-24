@@ -108,7 +108,7 @@ extern bool				useSingleQuotes;
 extern char				*foreColour;
 extern char				*backColour;
 extern char				*boldColour;
-extern char				*codeset;
+extern char				*codeSet;
 
 #ifdef _USEGTK3_
 extern GtkStyleProvider	*tabBoxProvider;

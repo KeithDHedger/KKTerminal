@@ -1,7 +1,7 @@
 
 /******************************************************
 *
-*     ©keithhedger Mon 23 Oct 14:08:12 BST 2017
+*     ©keithhedger Tue 24 Oct 12:47:40 BST 2017
 *     kdhedger68713@gmail.com
 *
 *     prefs.cpp
@@ -14,7 +14,7 @@
 #include "callbacks.h"
 
 GtkWidget	*prefsCheck[4];
-GtkWidget	*prefsText[4];
+GtkWidget	*prefsText[5];
 
 GtkWidget	*prefsWindow;
 
@@ -85,6 +85,7 @@ void doPrefs(GtkWidget* widget,gpointer data)
 	makePrefsText(BACKGROUNDCOLOURTXT,"Background Colour",backColour,vbox,true);
 	makePrefsText(BOLDCOLOURTXT,"Bold Colour",boldColour,vbox,true);
 	makePrefsText(FONTTXT,"Font",fontAndSize,vbox,true);
+	makePrefsText(CODESET,"Encoding",codeSet,vbox,true);
 #ifdef _USEGTK3_
 	gtk_box_pack_start(GTK_BOX(vbox),gtk_separator_new(GTK_ORIENTATION_HORIZONTAL),true,true,4);
 #else

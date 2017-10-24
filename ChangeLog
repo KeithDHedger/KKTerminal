@@ -1,4 +1,6 @@
 0.1.1
+Prefs now 'live', mostly.
+Added option to set encoding in prefs.
 Added "Use Single Quotes" to prefs for pasting into terminal quoted text, default is double quotes.
 Code clean.
 Added "Paste In Quotes" to context menu. 

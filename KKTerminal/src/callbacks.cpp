@@ -149,7 +149,7 @@ gboolean on_key_press(GtkWidget *terminal,GdkEventKey *event)
 	return false;
 }
 
-gboolean doButton(GtkWidget *widget, GdkEventButton *event,pageStruct* page)
+gboolean doButton(GtkWidget *widget,GdkEventButton *event,pageStruct* page)
 {
 	int			button,event_time;
 
@@ -268,11 +268,18 @@ void setPrefs(GtkWidget* widget,gpointer data)
 			g_free(backColour);
 			g_free(fontAndSize);
 			g_free(boldColour);
+			g_free(codeSet);
 			foreColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[TEXTCOLOURTXT]));
 			backColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[BACKGROUNDCOLOURTXT]));
 			boldColour=strdup(gtk_entry_get_text((GtkEntry*)prefsText[BOLDCOLOURTXT]));
 			fontAndSize=strdup(gtk_entry_get_text((GtkEntry*)prefsText[FONTTXT]));
+			codeSet=strdup(gtk_entry_get_text((GtkEntry*)prefsText[CODESET]));
 			gtk_widget_destroy(prefsWindow);
+			if(showMenuBar==true)
+				gtk_widget_show_all(menuBar);
+			else
+				gtk_widget_hide(menuBar);
+			setActivePrefs();
 		}
 
 	if((long)data==(long)-2)

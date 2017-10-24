@@ -1,6 +1,6 @@
 /******************************************************
 *
-*     ©keithhedger Mon 23 Oct 14:08:13 BST 2017
+*     ©keithhedger Tue 24 Oct 12:47:40 BST 2017
 *     kdhedger68713@gmail.com
 *
 *     prefs.h
@@ -17,7 +17,7 @@ enum {SHOWMENUBARCHK=0,SHOWICONSCHK,ALLOWBOLDCHK,USESINGLECHK};
 
 enum {SHOWMENUBARCHKID=3000,SHOWICONSCHKID,ALLOWBOLDCHKID,USESINGLECHKID};
 
-enum {TEXTCOLOURTXT=0,BACKGROUNDCOLOURTXT,BOLDCOLOURTXT,FONTTXT};
+enum {TEXTCOLOURTXT=0,BACKGROUNDCOLOURTXT,BOLDCOLOURTXT,FONTTXT,CODESET};
 
 extern bool showMenuBar;
 extern bool iconsInMenu;
@@ -27,6 +27,7 @@ extern char *foreColour;
 extern char *backColour;
 extern char *boldColour;
 extern char *fontAndSize;
+extern char *codeSet;
 
 extern GtkWidget	*prefsCheck[];
 

@@ -46,7 +46,7 @@ struct		option longOptions[]=
 			{"new-tab",1,0,'n'},
 			{"tab",0,0,'t'},
 			{"hold",0,0,'l'},
-			{"codeset",1,0,'s'},
+			{"codeSet",1,0,'s'},
 			{"help",0,0,'h'},
 			{0, 0, 0, 0}
 		};
@@ -129,9 +129,9 @@ kkterminal [OPTION] ... [OPTION]\n\
  -t, --tab		Open a new tab in PWD.\n\
  -e ...			Consume the rest of the command line and execute it in a new tab.\n\
 \n\
- -s, --codeset		Set the encoding ( default=UTF-8 ).\n\
- 			The codeset effects all tabs opened after setting.\n\
-			The last codeset used is remembered.\
+ -s, --codeSet		Set the encoding ( default=UTF-8 ).\n\
+ 			The codeSet effects all tabs opened after setting.\n\
+			The last codeSet used is remembered.\
 "};
 
 	printf("%s\n",help);
@@ -275,8 +275,8 @@ gint commandline (GApplication *application,GApplicationCommandLine *command_lin
 								}
 								break;
 							case 's':
-								free(codeset);
-								codeset=strdup(optarg);
+								free(codeSet);
+								codeSet=strdup(optarg);
 								break;
 						}
 				}

@@ -17,6 +17,7 @@ textbox:TEXTCOLOURTXT:Text Colour:foreColour
 textbox:BACKGROUNDCOLOURTXT:Background Colour:backColour
 textbox:BOLDCOLOURTXT:Bold Colour:boldColour
 textbox:FONTTXT:Font:fontAndSize
+textbox:CODESET:Encoding:codeSet
 
 VARIABLE:bool	showMenuBar=true:extern
 VARIABLE:bool	iconsInMenu=true:extern
@@ -27,3 +28,4 @@ VARIABLE:char	*foreColour="white":extern
 VARIABLE:char	*backColour="black":extern
 VARIABLE:char	*boldColour="red":extern
 VARIABLE:char	*fontAndSize="Monospace 10":extern
+VARIABLE:char	*codeSet="UTF-8":extern

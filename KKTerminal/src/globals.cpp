@@ -71,7 +71,7 @@ bool				useSingleQuotes=false;
 char				*foreColour=strdup("black");
 char				*backColour=strdup("white");
 char				*boldColour=strdup("black");
-char				*codeset=strdup("UTF-8");
+char				*codeSet=strdup("UTF-8");
 
 long				shortCuts[][3]={
 										{GDK_KEY_N,GDK_SHIFT_MASK+GDK_CONTROL_MASK,(long)&newPage},
@@ -103,7 +103,7 @@ args		mydata[]=
 					{"allowbold",TYPEBOOL,&allowBold},
 					{"usesingle",TYPEBOOL,&useSingleQuotes},
 					{"boldcolour",TYPESTRING,&boldColour},
-					{"codeset",TYPESTRING,&codeset},
+					{"codeSet",TYPESTRING,&codeSet},
 					{NULL,0,NULL}
 				};
 

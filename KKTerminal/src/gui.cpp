@@ -118,6 +118,70 @@ GtkWidget *makeMenu(pageStruct *page)
 	return(retwidg);
 }
 
+void setActivePrefs(void)
+{
+	pageStruct	*page=NULL;
+	int			pagenum=0;
+	GtkWidget	*vbox;
+#ifdef _USEGTK3_
+	GdkRGBA		forecolour;
+	GdkRGBA		backcolour;
+	GdkRGBA		boldcolour;
+#else
+	GdkColor	forecolour;
+	GdkColor	backcolour;
+	GdkColor	boldcolour;
+#endif
+
+	pagenum=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
+	if(pagenum>-1)
+		{
+			vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,pagenum);
+			page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
+		}
+
+	if(page==NULL)
+		return;
+
+//gdk_rgba_parse
+#ifdef _USEGTK3_
+	gdk_rgba_parse(&forecolour,(const gchar*)foreColour);
+	gdk_rgba_parse(&backcolour,(const gchar*)backColour);
+	gdk_rgba_parse(&boldcolour,(const gchar*)boldColour);
+
+#ifdef _VTEVERS290_
+	vte_terminal_set_color_foreground_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&forecolour);
+	vte_terminal_set_color_background_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&backcolour);
+	vte_terminal_set_color_bold_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&boldcolour);
+	vte_terminal_set_encoding((VteTerminal *)page->terminal,codeSet);
+#else
+	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkRGBA*)&forecolour);
+	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkRGBA*)&backcolour);
+	vte_terminal_set_color_bold((VteTerminal*)page->terminal,(const GdkRGBA*)&boldcolour);
+	vte_terminal_set_encoding((VteTerminal *)page->terminal,codeSet,NULL);
+#endif
+#else
+	gdk_color_parse((const gchar*)foreColour,&forecolour);
+	gdk_color_parse((const gchar*)backColour,&backcolour);
+	gdk_color_parse((const gchar*)boldColour,&boldcolour);
+	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkColor*)&forecolour);
+	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkColor*)&backcolour);
+	vte_terminal_set_color_bold((VteTerminal *)page->terminal,&boldcolour);
+	vte_terminal_set_encoding((VteTerminal *)page->terminal,codeSet);
+#endif
+
+	vte_terminal_set_allow_bold((VteTerminal*)page->terminal,allowBold);
+#ifdef _USEGTK3_
+	PangoFontDescription *pf;
+	pf=pango_font_description_from_string(fontAndSize);
+	vte_terminal_set_font((VteTerminal *)page->terminal,pf);
+#else
+	vte_terminal_set_font_from_string((VteTerminal *)page->terminal,fontAndSize);
+#endif
+
+	gtk_widget_show_all((GtkWidget*)page->terminal);
+}
+
 void addPage(const char *dir)
 {
 #ifdef _USEGTK3_
@@ -162,35 +226,6 @@ void addPage(const char *dir)
 			startterm[1]=NULL;
 		}
 
-//gdk_rgba_parse
-#ifdef _USEGTK3_
-	gdk_rgba_parse(&forecolour,(const gchar*)foreColour);
-	gdk_rgba_parse(&backcolour,(const gchar*)backColour);
-	gdk_rgba_parse(&boldcolour,(const gchar*)boldColour);
-
-#ifdef _VTEVERS290_
-	vte_terminal_set_color_foreground_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&forecolour);
-	vte_terminal_set_color_background_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&backcolour);
-	vte_terminal_set_color_bold_rgba((VteTerminal*)page->terminal,(const GdkRGBA*)&boldcolour);
-	vte_terminal_set_encoding ((VteTerminal *)page->terminal,codeset);
-#else
-	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkRGBA*)&forecolour);
-	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkRGBA*)&backcolour);
-	vte_terminal_set_color_bold((VteTerminal*)page->terminal,(const GdkRGBA*)&boldcolour);
-	vte_terminal_set_encoding ((VteTerminal *)page->terminal,codeset,NULL);
-#endif
-#else
-	gdk_color_parse((const gchar*)foreColour,&forecolour);
-	gdk_color_parse((const gchar*)backColour,&backcolour);
-	gdk_color_parse((const gchar*)boldColour,&boldcolour);
-	vte_terminal_set_color_foreground((VteTerminal*)page->terminal,(const GdkColor*)&forecolour);
-	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkColor*)&backcolour);
-	vte_terminal_set_color_bold ((VteTerminal *)page->terminal,&boldcolour);
-	vte_terminal_set_encoding ((VteTerminal *)page->terminal,codeset);
-#endif
-
-	vte_terminal_set_allow_bold ((VteTerminal*)page->terminal,allowBold);
-
 #ifdef _USEGTK3_
 #ifdef _VTEVERS290_
 	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)spawnflags),NULL,NULL,&page->pid,NULL);
@@ -199,14 +234,6 @@ void addPage(const char *dir)
 #endif
 #else
 	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)spawnflags,NULL,NULL,&page->pid,NULL);
-#endif
-
-#ifdef _USEGTK3_
-	PangoFontDescription *pf;
-	pf=pango_font_description_from_string(fontAndSize);
-	vte_terminal_set_font ((VteTerminal *)page->terminal,pf);
-#else
-	vte_terminal_set_font_from_string ((VteTerminal *)page->terminal,fontAndSize);
 #endif
 
 //dnd
@@ -234,6 +261,7 @@ void addPage(const char *dir)
 	page->hold=holdOpen;
 	g_strfreev(startterm);
 	termCommand=NULL;
+	setActivePrefs();
 }
 
 #ifdef _USEGTK3_
