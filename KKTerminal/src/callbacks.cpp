@@ -36,11 +36,19 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 	int		cnt=0;
 	char	*filename=NULL;
 	char	*pastedata=NULL;
+	char	quotetype='"';
+	char	*qtxt;
+	
+	if(useSingleQuotes==true)
+		quotetype='\'';
 
 	filename=(char*)gtk_selection_data_get_text(selection_data);
 	if(filename!=NULL)
 		{
-			vte_terminal_feed_child((VteTerminal*)widget,filename,strlen(filename));
+
+			asprintf(&qtxt,"%c%s%c",quotetype,filename,quotetype);
+			vte_terminal_feed_child((VteTerminal*)widget,qtxt,strlen(qtxt));
+			free(qtxt);
 			g_free(filename);
 		}
 
@@ -53,7 +61,7 @@ void dropUri(GtkWidget *widget,GdkDragContext *context,gint x,gint y,GtkSelectio
 					filename=g_filename_from_uri(array[j],NULL,NULL);
 					if(filename!=NULL)
 						{
-							g_string_append_printf(pastestr,"'%s' ",filename);
+							g_string_append_printf(pastestr,"%c%s%c ",quotetype,filename,quotetype);
 							g_free(filename);
 						}
 				}
