@@ -1,6 +1,6 @@
 /*
  *
- * ©K. D. Hedger. Thu 14 Jul 13:07:39 BST 2016 kdhedger68713@gmail.com
+ * ©K. D. Hedger. Thu 14 Jul 13:07:39 BST 2016 keithdhedger@gmail.com
 
  * This file (main.cpp) is part of KKTerminal.
 

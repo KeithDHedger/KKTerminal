@@ -1,6 +1,6 @@
 /*
  *
- * ©K. D. Hedger. Fri 15 Jul 12:19:20 BST 2016 kdhedger68713@gmail.com
+ * ©K. D. Hedger. Fri 15 Jul 12:19:20 BST 2016 keithdhedger@gmail.com
 
  * This file (callbacks.h) is part of KKTerminal.
 

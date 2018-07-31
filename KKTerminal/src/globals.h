@@ -1,6 +1,6 @@
 /*
  *
- * ©K. D. Hedger. Wed 13 Jul 20:10:11 BST 2016 kdhedger68713@gmail.com
+ * ©K. D. Hedger. Wed 13 Jul 20:10:11 BST 2016 keithdhedger@gmail.com
 
  * This file (globals.h) is part of KKTerminal.
 

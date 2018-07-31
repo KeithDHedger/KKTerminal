@@ -168,6 +168,7 @@ void setActivePrefs(void)
 	vte_terminal_set_color_background((VteTerminal*)page->terminal,(const GdkColor*)&backcolour);
 	vte_terminal_set_color_bold((VteTerminal *)page->terminal,&boldcolour);
 	vte_terminal_set_encoding((VteTerminal *)page->terminal,codeSet);
+	vte_terminal_set_emulation ((VteTerminal *)page->terminal, "xterm");
 #endif
 
 	vte_terminal_set_allow_bold((VteTerminal*)page->terminal,allowBold);

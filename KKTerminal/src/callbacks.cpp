@@ -1,6 +1,6 @@
 /*
  *
- * ©K. D. Hedger. Fri 15 Jul 12:19:12 BST 2016 kdhedger68713@gmail.com
+ * ©K. D. Hedger. Fri 15 Jul 12:19:12 BST 2016 keithdhedger@gmail.com
 
  * This file (callbacks.cpp) is part of KKTerminal.
 
@@ -199,7 +199,7 @@ void doAbout(GtkWidget* widget,gpointer data)
 
 void doHelp(GtkWidget* widget,gpointer data)
 {
-	sinkReturn=system("xdg-open http://khapplications.darktech.org/pages/kkterminal/kkterminal.html");
+	sinkReturn=system("xdg-open http://khapplications.freeddns.org/pages/kkterminal/kkterminal.html");
 }
 
 void newPage(GtkWidget *widget,gpointer data)
