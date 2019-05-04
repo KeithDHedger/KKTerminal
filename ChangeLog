@@ -1,4 +1,5 @@
 0.1.1
+Set scroll bar to be always on.
 D'n'D now obeys quote setting from prefs.
 Prefs now 'live', mostly.
 Added option to set encoding in prefs.

@@ -5,3 +5,11 @@ Makefile
 KKTerminal/artwork
 autom4te.cache
 makepkg
+*.deps
+*.log
+config.h
+stamp-*
+*.dirstamp
+*.status
+KKTerminal/src/html
+KKTerminal/src/searchdata.xml

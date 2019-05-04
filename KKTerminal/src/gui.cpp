@@ -207,7 +207,7 @@ void addPage(const char *dir)
 	vte_terminal_set_scrollback_lines((VteTerminal*)page->terminal,-1);
 
 	page->swindow=gtk_scrolled_window_new(NULL,NULL);
-	gtk_scrolled_window_set_policy((GtkScrolledWindow*)page->swindow,GTK_POLICY_AUTOMATIC,GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy((GtkScrolledWindow*)page->swindow,GTK_POLICY_NEVER,GTK_POLICY_ALWAYS);
 	gtk_container_add(GTK_CONTAINER(page->swindow),page->terminal);
 
 	page->tabVbox=createNewBox(NEWVBOX,true,4);
