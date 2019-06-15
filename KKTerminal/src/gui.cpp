@@ -229,7 +229,7 @@ void addPage(const char *dir)
 
 #ifdef _USEGTK3_
 #ifdef _VTEVERS290_
-	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)spawnflags),NULL,NULL,&page->pid,NULL);
+	vte_terminal_fork_command_full((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)spawnflags,NULL,NULL,&page->pid,NULL);
 #else
 	vte_terminal_spawn_sync((VteTerminal *)page->terminal,VTE_PTY_DEFAULT,dir,startterm,NULL,(GSpawnFlags)spawnflags,NULL,NULL,&page->pid,NULL,NULL);
 #endif
