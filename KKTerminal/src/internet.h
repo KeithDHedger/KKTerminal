@@ -28,7 +28,7 @@
 #define THEMEMANAGER GLOBALWEBSITE "/pages/apps.html#themeed"
 #define COMPMANAGER GLOBALWEBSITE "/pages/apps.html#xfcecomp"
 #define KKEDITPAGE "http://kkedit.freeddns.org"
-#define KKTERMINALPAGE "http://khapplications.freeddns.org/pages/kkterminal/kkterminal.html"
+#define KKTERMINALPAGE "http://khapplications.freeddns.org"
 
 #define COPYRITE "Copyright ©2013-2016 K.D.Hedger"
 
