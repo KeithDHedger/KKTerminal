@@ -13,3 +13,4 @@ stamp-*
 *.status
 KKTerminal/src/html
 KKTerminal/src/searchdata.xml
+KKTerminal/app/kkterminal
