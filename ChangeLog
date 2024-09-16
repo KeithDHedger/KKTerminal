@@ -1,4 +1,5 @@
 0.1.1
+Set title to cwd on text changed.
 Fixed unable to shrink window.
 Set scroll bar to be always on.
 D'n'D now obeys quote setting from prefs.

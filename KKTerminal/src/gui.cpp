@@ -85,6 +85,8 @@ GtkWidget *makeNewTab(char *name,pageStruct *page)
 #endif
 
 	gtk_widget_show_all(evbox);
+//const gchar *title=getenv("PWD");
+//gtk_window_set_title((GtkWindow*)mainWindow,getenv("PWD"));
 	return(evbox);
 }
 
@@ -183,6 +185,22 @@ void setActivePrefs(void)
 	gtk_widget_show_all((GtkWidget*)page->terminal);
 }
 
+
+void contentsChanged(VteTerminal *vte,gpointer userdata)
+{
+	pageStruct	*page=NULL;
+	char			*wd=NULL;
+	GtkWidget	*vbox;
+	int			thispage;
+
+	thispage=gtk_notebook_get_current_page((GtkNotebook*)mainNotebook);
+	vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,thispage);
+	page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
+	wd=getPwd(page);
+	gtk_window_set_title((GtkWindow*)mainWindow,wd);
+	g_free(wd);
+}
+
 void addPage(const char *dir)
 {
 #ifdef _USEGTK3_
@@ -205,6 +223,8 @@ void addPage(const char *dir)
 	page->terminal=vte_terminal_new();
 	vte_terminal_set_default_colors((VteTerminal*)page->terminal);
 	vte_terminal_set_scrollback_lines((VteTerminal*)page->terminal,-1);
+
+	g_signal_connect(G_OBJECT(page->terminal),"contents-changed",G_CALLBACK(contentsChanged),NULL);
 
 	page->swindow=gtk_scrolled_window_new(NULL,NULL);
 	gtk_scrolled_window_set_policy((GtkScrolledWindow*)page->swindow,GTK_POLICY_AUTOMATIC,GTK_POLICY_ALWAYS);
@@ -316,6 +336,20 @@ GtkWidget* newMenuItem(const char* menuname,const char* stockid,int shortnum,con
 
 	return(menu);
 }
+gboolean changePage(GtkNotebook *notebook,gpointer arg1,guint arg2,gpointer user_data)
+{
+	pageStruct	*page=NULL;
+	char			*wd=NULL;
+	GtkWidget	*vbox;
+
+	vbox=gtk_notebook_get_nth_page((GtkNotebook*)mainNotebook,arg2);
+	page=(pageStruct*)g_object_get_data((GObject*)vbox,"pageid");
+	wd=getPwd(page);
+	gtk_window_set_title((GtkWindow*)mainWindow,wd);
+	g_free(wd);
+
+return(true);
+}
 
 void buildMainGui(void)
 {
@@ -325,7 +359,6 @@ void buildMainGui(void)
 	GdkColor	colour;
 #endif
 
-	GtkWidget	*terminal=NULL;
 	GtkWidget	*swindow;
 	GtkWidget	*menu;
 	GtkWidget	*menuitem;
@@ -348,6 +381,8 @@ void buildMainGui(void)
 	g_signal_connect(G_OBJECT(mainWindow),"key-press-event",G_CALLBACK(keyShortCut),NULL);
 
 	mainNotebook=gtk_notebook_new();
+	g_signal_connect(G_OBJECT(mainNotebook),"switch-page",G_CALLBACK(changePage),NULL);
+
 	gtk_notebook_set_scrollable((GtkNotebook*)mainNotebook,true);
 
 	gtk_notebook_set_show_tabs((GtkNotebook*)mainNotebook,true);

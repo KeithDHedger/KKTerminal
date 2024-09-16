@@ -218,6 +218,7 @@ void newPage(GtkWidget *widget,gpointer data)
 	wd=getPwd(page);
 	addPage(wd);
 	g_free(wd);
+
 }
 
 void toggleMenuBar(GtkWidget *widget,gpointer data)
